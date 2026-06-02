@@ -1,0 +1,2 @@
+export const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxA-E2eDzyYWpu_-gPq_eKEj3AUr4QqwT2AT69GrfpPpy8j9t8zGjBLpZ20LNtPNqM_/exec'
+export const FORMSPREE_URL = 'https://formspree.io/f/xojbopaq'

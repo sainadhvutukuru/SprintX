@@ -1,13 +1,13 @@
 function Hero() {
   return (
     <section style={{
-      minHeight: '88vh',
+      minHeight: '60vh',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       textAlign: 'center',
-      padding: '40px 24px 60px',
+      padding: '20px 24px 30px',
       position: 'relative',
       overflow: 'hidden',
     }}>

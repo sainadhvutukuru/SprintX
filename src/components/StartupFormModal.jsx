@@ -1,15 +1,18 @@
 import { useState } from 'react'
+import { GOOGLE_SHEETS_WEB_APP_URL, FORMSPREE_URL } from '../config'
 
-function MentorFormModal({ isOpen, onClose }) {
+function StartupFormModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
-    roleOrg: '',
-    expertise: '',
-    otherExpertise: '',
-    linkedin: '',
-    contribution: '',
+    startupName: '',
+    stage: '',
+    sector: '',
+    otherSector: '',
+    city: '',
+    description: '',
   })
+  const [submitting, setSubmitting] = useState(false)
 
   if (!isOpen) return null
 
@@ -17,9 +20,44 @@ function MentorFormModal({ isOpen, onClose }) {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const handleSubmit = async () => {
+    setSubmitting(true)
+    try {
+      // Send to Formspree
+      await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ ...formData, formType: 'Startup Form' }),
+      })
+
+      // Send to Google Sheets (no-cors is needed because Google Apps Script doesn't support CORS preflight)
+      const sheetsRes = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ ...formData, formType: 'Startup Form' }),
+      })
+
+      alert('Form submitted successfully!')
+      setFormData({
+        fullName: '', email: '', startupName: '',
+        stage: '', sector: '', otherSector: '', city: '', description: '',
+      })
+      onClose()
+
+    } catch (error) {
+      console.log('Error:', error)
+      alert('Something went wrong. Please try again!')
+    }
+    setSubmitting(false)
+  }
+
   const inputStyle = {
     width: '100%',
-    padding: '12px 16px',
+    padding: '12px 14px',
     border: '1px solid rgba(255,255,255,0.1)',
     borderRadius: '8px',
     color: '#fff',
@@ -43,39 +81,40 @@ function MentorFormModal({ isOpen, onClose }) {
         background: 'rgba(0,0,0,0.7)', zIndex: '100',
       }} />
 
-      <div style={{
+      <div onClick={(e) => e.stopPropagation()} style={{
         position: 'fixed', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
         background: '#0f1520',
         border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: '16px', padding: '40px',
-        width: '580px', maxHeight: '90vh',
-        overflowY: 'auto', zIndex: '101',
+        borderRadius: '16px',
+        padding: '36px',
+        width: '640px',
+        zIndex: '101',
+        overflow: 'hidden',
       }}>
 
         <button onClick={onClose} style={{
-          position: 'absolute', top: '16px', right: '16px',
+          position: 'absolute', top: '14px', right: '14px',
           background: 'rgba(255,255,255,0.05)', border: 'none',
-          color: '#fff', width: '32px', height: '32px',
-          borderRadius: '50%', fontSize: '16px', cursor: 'pointer',
+          color: '#fff', width: '30px', height: '30px',
+          borderRadius: '50%', fontSize: '14px', cursor: 'pointer',
         }}>✕</button>
 
-        <div style={{ marginBottom: '28px' }}>
-          <p style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: '#1aa88a', marginBottom: '8px' }}>
-            For Mentors
+        <div style={{ marginBottom: '24px' }}>
+          <p style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: '#f15b26', marginBottom: '8px' }}>
+            For Founders
           </p>
-          <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#fff', marginBottom: '10px' }}>
-            CONNECT AS A MENTOR
+          <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', marginBottom: '8px' }}>
+            CONNECT YOUR STARTUP
           </h2>
           <p style={{ fontSize: '14px', color: '#777', lineHeight: '1.6' }}>
-            Tell us who you are and how you'd like to contribute. We'll reach out when there are founders who can benefit from exactly what you bring.
+            Tell us what you're building. We'll reach out when programs open and when there's an opportunity that fits exactly where you are.
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
-          {/* FULL NAME + EMAIL */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
               <label style={labelStyle}>Full Name *</label>
               <input name="fullName" placeholder="Your name"
@@ -83,71 +122,75 @@ function MentorFormModal({ isOpen, onClose }) {
             </div>
             <div>
               <label style={labelStyle}>Email *</label>
-              <input name="email" placeholder="you@domain.com"
+              <input name="email" placeholder="you@startup.com"
                 value={formData.email} onChange={handleChange} style={inputStyle} />
             </div>
           </div>
 
-          {/* CURRENT ROLE & ORG */}
           <div>
-            <label style={labelStyle}>Current Role & Organisation *</label>
-            <input name="roleOrg" placeholder="e.g. CEO at XYZ Sports"
-              value={formData.roleOrg} onChange={handleChange} style={inputStyle} />
+            <label style={labelStyle}>Startup Name *</label>
+            <input name="startupName" placeholder="What's your startup called?"
+              value={formData.startupName} onChange={handleChange} style={inputStyle} />
           </div>
 
-          {/* AREA OF EXPERTISE */}
-          <div>
-            <label style={labelStyle}>Area of Expertise *</label>
-            <select name="expertise" value={formData.expertise}
-              onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}>
-              <option value="">Select expertise</option>
-              <option value="federation">Sports Federation & League Operations</option>
-              <option value="athlete">Professional Athlete / Coach</option>
-              <option value="science">Sports Science & Performance</option>
-              <option value="esports">eSports & Gaming</option>
-              <option value="media">Sports Media & Broadcasting</option>
-              <option value="finance">Startup Finance & Investment</option>
-              <option value="sales">Sales & Business Development</option>
-              <option value="tech">Technology & Product</option>
-              <option value="marketing">Marketing & Brand Strategy</option>
-              <option value="legal">Legal & Compliance</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          {/* OTHER EXPERTISE */}
-          {formData.expertise === 'other' && (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
-              <label style={labelStyle}>Please specify your expertise *</label>
-              <textarea name="otherExpertise"
-                placeholder="Tell us about your area of expertise..."
-                value={formData.otherExpertise} onChange={handleChange}
-                rows={3} style={{ ...inputStyle, resize: 'vertical' }} />
+              <label style={labelStyle}>Stage *</label>
+              <select name="stage" value={formData.stage}
+                onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}>
+                <option value="">Select stage</option>
+                <option value="idea">Idea / Pre-MVP</option>
+                <option value="mvp">Working MVP</option>
+                <option value="revenue">Generating Revenue</option>
+              </select>
+            </div>
+            <div>
+              <label style={labelStyle}>Sector *</label>
+              <select name="sector" value={formData.sector}
+                onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}>
+                <option value="">Select sector</option>
+                <option value="sportstech">Sports Tech</option>
+                <option value="wellness">Wellness & Fitness</option>
+                <option value="esports">eSports & Gaming</option>
+                <option value="commerce">Sports Commerce</option>
+                <option value="education">Sports Education</option>
+                <option value="others">Others</option>
+              </select>
+            </div>
+          </div>
+
+          {formData.sector === 'others' && (
+            <div>
+              <label style={labelStyle}>Please specify your sector *</label>
+              <input name="otherSector" placeholder="Tell us about your sector..."
+                value={formData.otherSector} onChange={handleChange} style={inputStyle} />
             </div>
           )}
 
-          {/* LINKEDIN */}
           <div>
-            <label style={labelStyle}>LinkedIn Profile</label>
-            <input name="linkedin" placeholder="linkedin.com/in/yourprofile"
-              value={formData.linkedin} onChange={handleChange} style={inputStyle} />
+            <label style={labelStyle}>City</label>
+            <input name="city" placeholder="Where are you based?"
+              value={formData.city} onChange={handleChange} style={inputStyle} />
           </div>
 
-          {/* CONTRIBUTION */}
           <div>
-            <label style={labelStyle}>How would you like to contribute?</label>
-            <textarea name="contribution"
-              placeholder="Tell us about your experience and how you'd like to support sports-tech founders..."
-              value={formData.contribution} onChange={handleChange}
-              rows={4} style={{ ...inputStyle, resize: 'vertical' }} />
+            <label style={labelStyle}>What are you building?</label>
+            <textarea name="description" placeholder="Brief description of your startup..."
+              value={formData.description} onChange={handleChange}
+              rows={3} style={{ ...inputStyle, resize: 'none' }} />
           </div>
 
-          <button style={{
-            padding: '14px', borderRadius: '8px', fontSize: '15px',
-            fontWeight: '700', border: 'none', background: '#1aa88a',
-            color: '#fff', width: '100%', cursor: 'pointer', marginTop: '8px',
-          }}>
-            Submit Your Interest →
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            style={{
+              padding: '13px', borderRadius: '8px', fontSize: '15px',
+              fontWeight: '700', border: 'none',
+              background: submitting ? '#aaa' : '#f15b26',
+              color: '#fff', width: '100%',
+              cursor: submitting ? 'not-allowed' : 'pointer', marginTop: '4px',
+            }}>
+            {submitting ? 'Submitting...' : 'Connect Your Startup →'}
           </button>
 
         </div>
@@ -156,4 +199,4 @@ function MentorFormModal({ isOpen, onClose }) {
   )
 }
 
-export default MentorFormModal
+export default StartupFormModal

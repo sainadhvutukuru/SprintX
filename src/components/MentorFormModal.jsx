@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { GOOGLE_SHEETS_WEB_APP_URL, FORMSPREE_URL } from '../config'
 
 function MentorFormModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ function MentorFormModal({ isOpen, onClose }) {
     linkedin: '',
     contribution: '',
   })
+  const [submitting, setSubmitting] = useState(false)
 
   if (!isOpen) return null
 
@@ -17,10 +19,44 @@ function MentorFormModal({ isOpen, onClose }) {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const handleSubmit = async () => {
+    setSubmitting(true)
+    try {
+      // Send to Formspree
+      await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ ...formData, formType: 'Mentor Form' }),
+      })
+
+      // Send to Google Sheets (no-cors is needed because Google Apps Script doesn't support CORS preflight)
+      const sheetsRes = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ ...formData, formType: 'Mentor Form' }),
+      })
+
+      alert('Form submitted successfully!')
+      setFormData({
+        fullName: '', email: '', roleOrg: '',
+        expertise: '', otherExpertise: '', linkedin: '', contribution: '',
+      })
+      onClose()
+
+    } catch (error) {
+      console.log('Error:', error)
+      alert('Something went wrong. Please try again!')
+    }
+    setSubmitting(false)
+  }
+
   const inputStyle = {
     width: '100%',
-    padding: '12px 16px',
-    background: 'rgba(255,255,255,0.05)',
+    padding: '12px 14px',
     border: '1px solid rgba(255,255,255,0.1)',
     borderRadius: '8px',
     color: '#fff',
@@ -39,59 +75,35 @@ function MentorFormModal({ isOpen, onClose }) {
 
   return (
     <>
-      {/* OVERLAY */}
-      <div
-        onClick={onClose}
-        style={{
-          position: 'fixed',
-          inset: '0',
-          background: 'rgba(0,0,0,0.7)',
-          zIndex: '100',
-        }}
-      />
+      <div onClick={onClose} style={{
+        position: 'fixed', inset: '0',
+        background: 'rgba(0,0,0,0.7)', zIndex: '100',
+      }} />
 
-      {/* MODAL */}
-      <div style={{
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
+      <div onClick={(e) => e.stopPropagation()} style={{
+        position: 'fixed', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
         background: '#0f1520',
         border: '1px solid rgba(255,255,255,0.1)',
         borderRadius: '16px',
-        padding: '40px',
-        width: '580px',
-        maxHeight: '90vh',
-        overflowY: 'auto',
+        padding: '36px',
+        width: '640px',
         zIndex: '101',
+        overflow: 'hidden',
       }}>
 
-        {/* CLOSE BUTTON */}
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '16px',
-            right: '16px',
-            background: 'rgba(255,255,255,0.05)',
-            border: 'none',
-            color: '#fff',
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            fontSize: '16px',
-            cursor: 'pointer',
-          }}
-        >
-          ✕
-        </button>
+        <button onClick={onClose} style={{
+          position: 'absolute', top: '14px', right: '14px',
+          background: 'rgba(255,255,255,0.05)', border: 'none',
+          color: '#fff', width: '30px', height: '30px',
+          borderRadius: '50%', fontSize: '14px', cursor: 'pointer',
+        }}>✕</button>
 
-        {/* HEADER */}
-        <div style={{ marginBottom: '28px' }}>
+        <div style={{ marginBottom: '24px' }}>
           <p style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: '#1aa88a', marginBottom: '8px' }}>
             For Mentors
           </p>
-          <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#fff', marginBottom: '10px' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', marginBottom: '8px' }}>
             CONNECT AS A MENTOR
           </h2>
           <p style={{ fontSize: '14px', color: '#777', lineHeight: '1.6' }}>
@@ -99,54 +111,31 @@ function MentorFormModal({ isOpen, onClose }) {
           </p>
         </div>
 
-        {/* FORM */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
-          {/* FULL NAME + EMAIL */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
               <label style={labelStyle}>Full Name *</label>
-              <input
-                name="fullName"
-                placeholder="Your name"
-                value={formData.fullName}
-                onChange={handleChange}
-                style={inputStyle}
-              />
+              <input name="fullName" placeholder="Your name"
+                value={formData.fullName} onChange={handleChange} style={inputStyle} />
             </div>
             <div>
               <label style={labelStyle}>Email *</label>
-              <input
-                name="email"
-                placeholder="you@domain.com"
-                value={formData.email}
-                onChange={handleChange}
-                style={inputStyle}
-              />
+              <input name="email" placeholder="you@domain.com"
+                value={formData.email} onChange={handleChange} style={inputStyle} />
             </div>
           </div>
 
-          {/* CURRENT ROLE & ORG */}
           <div>
             <label style={labelStyle}>Current Role & Organisation *</label>
-            <input
-              name="roleOrg"
-              placeholder="e.g. CEO at XYZ Sports"
-              value={formData.roleOrg}
-              onChange={handleChange}
-              style={inputStyle}
-            />
+            <input name="roleOrg" placeholder="e.g. CEO at XYZ Sports"
+              value={formData.roleOrg} onChange={handleChange} style={inputStyle} />
           </div>
 
-          {/* AREA OF EXPERTISE */}
           <div>
             <label style={labelStyle}>Area of Expertise *</label>
-            <select
-              name="expertise"
-              value={formData.expertise}
-              onChange={handleChange}
-              style={{ ...inputStyle, cursor: 'pointer' }}
-            >
+            <select name="expertise" value={formData.expertise}
+              onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}>
               <option value="">Select expertise</option>
               <option value="federation">Sports Federation & League Operations</option>
               <option value="athlete">Professional Athlete / Coach</option>
@@ -162,60 +151,39 @@ function MentorFormModal({ isOpen, onClose }) {
             </select>
           </div>
 
-          {/* OTHER EXPERTISE - shows only when Other selected */}
           {formData.expertise === 'other' && (
             <div>
-              <label style={labelStyle}>Please specify your expertise *</label>
-              <textarea
-                name="otherExpertise"
-                placeholder="Tell us about your area of expertise..."
-                value={formData.otherExpertise}
-                onChange={handleChange}
-                rows={3}
-                style={{ ...inputStyle, resize: 'vertical' }}
-              />
+              <label style={labelStyle}>Please specify *</label>
+              <input name="otherExpertise" placeholder="Tell us about your expertise..."
+                value={formData.otherExpertise} onChange={handleChange} style={inputStyle} />
             </div>
           )}
 
-          {/* LINKEDIN */}
           <div>
             <label style={labelStyle}>LinkedIn Profile</label>
-            <input
-              name="linkedin"
-              placeholder="linkedin.com/in/yourprofile"
-              value={formData.linkedin}
-              onChange={handleChange}
-              style={inputStyle}
-            />
+            <input name="linkedin" placeholder="linkedin.com/in/yourprofile"
+              value={formData.linkedin} onChange={handleChange} style={inputStyle} />
           </div>
 
-          {/* CONTRIBUTION */}
           <div>
             <label style={labelStyle}>How would you like to contribute?</label>
-            <textarea
-              name="contribution"
+            <textarea name="contribution"
               placeholder="Tell us about your experience and how you'd like to support sports-tech founders..."
-              value={formData.contribution}
-              onChange={handleChange}
-              rows={4}
-              style={{ ...inputStyle, resize: 'vertical' }}
-            />
+              value={formData.contribution} onChange={handleChange}
+              rows={3} style={{ ...inputStyle, resize: 'none' }} />
           </div>
 
-          {/* SUBMIT */}
-          <button style={{
-            padding: '14px',
-            borderRadius: '8px',
-            fontSize: '15px',
-            fontWeight: '700',
-            border: 'none',
-            background: '#1aa88a',
-            color: '#fff',
-            width: '100%',
-            cursor: 'pointer',
-            marginTop: '8px',
-          }}>
-            Submit Your Interest →
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            style={{
+              padding: '13px', borderRadius: '8px', fontSize: '15px',
+              fontWeight: '700', border: 'none',
+              background: submitting ? '#aaa' : '#1aa88a',
+              color: '#fff', width: '100%',
+              cursor: submitting ? 'not-allowed' : 'pointer', marginTop: '4px',
+            }}>
+            {submitting ? 'Submitting...' : 'Submit Your Interest →'}
           </button>
 
         </div>
