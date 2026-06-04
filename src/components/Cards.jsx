@@ -7,23 +7,21 @@ const cards = [
   {
     icon: '🚀',
     tag: 'For Founders',
-    tagColor: '#f15b26',
+    tagColor: '#e05c1a',
     title: 'Building in Sports Tech?',
     desc: 'From raw idea to first revenue to scale — your home is right here.',
-    btnText: 'Connect Your Startup',
-    btnColor: '#f15b26',
-    topBorder: '#f15b26',
+    btnText: 'Get started',
+    btnColor: '#e05c1a',
     modal: 'founder',
   },
   {
     icon: '🎯',
     tag: 'For Mentors',
-    tagColor: '#1aa88a',
+    tagColor: '#1db97a',
     title: 'Built Something Worth Sharing?',
     desc: 'Help the next wave of sports-tech founders build smarter, faster, better.',
-    btnText: 'Connect as a Mentor',
-    btnColor: '#1aa88a',
-    topBorder: '#1aa88a',
+    btnText: 'Get started',
+    btnColor: '#1db97a',
     modal: 'mentor',
   },
   {
@@ -32,9 +30,8 @@ const cards = [
     tagColor: '#d4a017',
     title: 'Want Early Access to Deal Flow?',
     desc: "First look at India's most promising sports-tech startups — before anyone else.",
-    btnText: 'Connect as an Investor',
+    btnText: 'Get started',
     btnColor: '#d4a017',
-    topBorder: '#d4a017',
     modal: 'investor',
   },
 ]
@@ -61,23 +58,20 @@ function Cards() {
               onMouseEnter={() => setHoveredCard(card.tag)}
               onMouseLeave={() => setHoveredCard(null)}
               style={{
-                border: `1px solid ${hoveredCard === card.tag ? card.btnColor : 'rgba(255,255,255,0.08)'}`,
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderBottom: hoveredCard === card.tag ? `3px solid ${card.btnColor}` : '3px solid transparent',
                 borderRadius: '12px',
                 padding: '32px 28px',
                 background: hoveredCard === card.tag
-                  ? `${card.btnColor}15`
+                  ? `${card.btnColor}0f`
                   : 'rgba(255,255,255,0.02)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '16px',
                 position: 'relative',
                 overflow: 'hidden',
-                borderTop: `3px solid ${card.topBorder}`,
-                transform: hoveredCard === card.tag ? 'translateY(-6px)' : 'translateY(0)',
-                boxShadow: hoveredCard === card.tag
-                  ? `0 12px 40px ${card.btnColor}30`
-                  : 'none',
-                transition: 'all 0.3s ease',
+                transform: hoveredCard === card.tag ? 'translateY(-4px)' : 'translateY(0)',
+                transition: 'all 0.25s ease',
                 cursor: 'pointer',
               }}>
 
@@ -136,6 +130,11 @@ function Cards() {
                   cursor: 'pointer',
                 }}>
                 {card.btnText}
+                <span style={{
+                  display: 'inline-block',
+                  transition: 'margin-left 0.25s ease',
+                  marginLeft: hoveredCard === card.tag ? '4px' : '0',
+                }}> →</span>
               </button>
 
             </div>

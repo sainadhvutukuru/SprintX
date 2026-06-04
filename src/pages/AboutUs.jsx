@@ -9,13 +9,13 @@ function AboutUs() {
       <div style={{ background: '#080c14' }}>
         <Navbar />
       </div>
-      <div style={{ background: '#080c14' }}>
+      <div style={{ background: '#0a0f1e' }}>
         <WhatIsSprintX />
       </div>
-      <div style={{ background: '#0d1220' }}>
+      <div style={{ background: '#0d1117' }}>
         <Edge />
       </div>
-      <div style={{ background: '#060910' }}>
+      <div style={{ background: '#080c14' }}>
         <Footer />
       </div>
     </div>

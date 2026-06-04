@@ -12,15 +12,34 @@ function StartupFormModal({ isOpen, onClose }) {
     city: '',
     description: '',
   })
+  const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
 
   if (!isOpen) return null
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    setErrors({ ...errors, [e.target.name]: '' })
+  }
+
+  const validate = () => {
+    const newErrors = {}
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required'
+    if (!formData.email.trim()) newErrors.email = 'Email is required'
+    if (!formData.startupName.trim()) newErrors.startupName = 'Startup Name is required'
+    if (!formData.stage) newErrors.stage = 'Stage is required'
+    if (!formData.sector) newErrors.sector = 'Sector is required'
+    if (formData.sector === 'others' && !formData.otherSector.trim()) {
+      newErrors.otherSector = 'Please specify your sector'
+    }
+    if (!formData.city.trim()) newErrors.city = 'City is required'
+    if (!formData.description.trim()) newErrors.description = 'This field is required'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async () => {
+    if (!validate()) return
     setSubmitting(true)
     try {
       // Send to Formspree
@@ -46,6 +65,7 @@ function StartupFormModal({ isOpen, onClose }) {
         fullName: '', email: '', startupName: '',
         stage: '', sector: '', otherSector: '', city: '', description: '',
       })
+      setErrors({})
       onClose()
 
     } catch (error) {
@@ -55,15 +75,19 @@ function StartupFormModal({ isOpen, onClose }) {
     setSubmitting(false)
   }
 
-  const inputStyle = {
+  const inputStyle = (hasError) => ({
     width: '100%',
     padding: '12px 14px',
-    border: '1px solid rgba(255,255,255,0.1)',
+    border: hasError ? '1px solid #ff4444' : '1px solid rgba(255,255,255,0.1)',
     borderRadius: '8px',
     color: '#fff',
     fontSize: '14px',
     outline: 'none',
     backgroundColor: '#1a2035',
+  })
+
+  const errorMsgStyle = {
+    fontSize: '12px', color: '#ff4444', marginTop: '4px',
   }
 
   const labelStyle = {
@@ -118,44 +142,49 @@ function StartupFormModal({ isOpen, onClose }) {
             <div>
               <label style={labelStyle}>Full Name *</label>
               <input name="fullName" placeholder="Your name"
-                value={formData.fullName} onChange={handleChange} style={inputStyle} />
+                value={formData.fullName} onChange={handleChange} style={inputStyle(!!errors.fullName)} />
+              {errors.fullName && <p style={errorMsgStyle}>{errors.fullName}</p>}
             </div>
             <div>
               <label style={labelStyle}>Email *</label>
               <input name="email" placeholder="you@startup.com"
-                value={formData.email} onChange={handleChange} style={inputStyle} />
+                value={formData.email} onChange={handleChange} style={inputStyle(!!errors.email)} />
+              {errors.email && <p style={errorMsgStyle}>{errors.email}</p>}
             </div>
           </div>
 
           <div>
             <label style={labelStyle}>Startup Name *</label>
             <input name="startupName" placeholder="What's your startup called?"
-              value={formData.startupName} onChange={handleChange} style={inputStyle} />
+              value={formData.startupName} onChange={handleChange} style={inputStyle(!!errors.startupName)} />
+            {errors.startupName && <p style={errorMsgStyle}>{errors.startupName}</p>}
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
               <label style={labelStyle}>Stage *</label>
               <select name="stage" value={formData.stage}
-                onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}>
+                onChange={handleChange} style={{ ...inputStyle(!!errors.stage), cursor: 'pointer' }}>
                 <option value="">Select stage</option>
                 <option value="idea">Idea / Pre-MVP</option>
                 <option value="mvp">Working MVP</option>
-                <option value="revenue">Generating Revenue</option>
-              </select>
+              <option value="revenue">Generating Revenue</option>
+            </select>
+              {errors.stage && <p style={errorMsgStyle}>{errors.stage}</p>}
             </div>
             <div>
               <label style={labelStyle}>Sector *</label>
               <select name="sector" value={formData.sector}
-                onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}>
+                onChange={handleChange} style={{ ...inputStyle(!!errors.sector), cursor: 'pointer' }}>
                 <option value="">Select sector</option>
                 <option value="sportstech">Sports Tech</option>
                 <option value="wellness">Wellness & Fitness</option>
                 <option value="esports">eSports & Gaming</option>
                 <option value="commerce">Sports Commerce</option>
                 <option value="education">Sports Education</option>
-                <option value="others">Others</option>
-              </select>
+              <option value="others">Others</option>
+            </select>
+              {errors.sector && <p style={errorMsgStyle}>{errors.sector}</p>}
             </div>
           </div>
 
@@ -163,21 +192,24 @@ function StartupFormModal({ isOpen, onClose }) {
             <div>
               <label style={labelStyle}>Please specify your sector *</label>
               <input name="otherSector" placeholder="Tell us about your sector..."
-                value={formData.otherSector} onChange={handleChange} style={inputStyle} />
+                value={formData.otherSector} onChange={handleChange} style={inputStyle(!!errors.otherSector)} />
+              {errors.otherSector && <p style={errorMsgStyle}>{errors.otherSector}</p>}
             </div>
           )}
 
           <div>
-            <label style={labelStyle}>City</label>
+            <label style={labelStyle}>City *</label>
             <input name="city" placeholder="Where are you based?"
-              value={formData.city} onChange={handleChange} style={inputStyle} />
+              value={formData.city} onChange={handleChange} style={inputStyle(!!errors.city)} />
+            {errors.city && <p style={errorMsgStyle}>{errors.city}</p>}
           </div>
 
           <div>
-            <label style={labelStyle}>What are you building?</label>
+            <label style={labelStyle}>What are you building? *</label>
             <textarea name="description" placeholder="Brief description of your startup..."
               value={formData.description} onChange={handleChange}
-              rows={3} style={{ ...inputStyle, resize: 'none' }} />
+              rows={3} style={{ ...inputStyle(!!errors.description), resize: 'none' }} />
+            {errors.description && <p style={errorMsgStyle}>{errors.description}</p>}
           </div>
 
           <button

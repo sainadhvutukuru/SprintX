@@ -34,8 +34,8 @@ function Navbar() {
           src={logo}
           alt="SprintX Logo"
           style={{
-            height: '90px',
-            width: '240px',
+            height: '40px',
+            width: 'auto',
             objectFit: 'contain',
             objectPosition: 'left',
           }}

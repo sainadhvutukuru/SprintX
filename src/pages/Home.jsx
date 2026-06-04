@@ -1,7 +1,6 @@
 import AnnouncementBar from '../components/AnnouncementBar'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
-import Cards from '../components/Cards'
 import StatsBar from '../components/StatsBar'
 import Programs from '../components/Programs'
 import Partners from '../components/Partners'
@@ -25,39 +24,35 @@ function Home() {
         <Navbar />
       </div>
 
-      <div style={{ background: '#080c14' }}>
+      <div style={{ background: '#0d1117' }}>
         <Hero />
       </div>
 
-      <div style={{ background: '#0d1220' }}>
-        <Cards />
-      </div>
-
-      <div style={{ background: '#080c14' }}>
+      <div style={{ background: '#0a0f1e' }}>
         <StatsBar />
       </div>
 
-      <div style={{ background: '#0d1220' }}>
+      <div style={{ background: '#0d1117' }}>
         <Programs />
       </div>
 
-      <div style={{ background: '#080c14' }}>
+      <div style={{ background: '#0a0f1e' }}>
         <Sectors />
       </div>
 
-      <div style={{ background: '#0d1220' }}>
+      <div style={{ background: '#0d1117' }}>
         <Edge />
       </div>
 
-      <div style={{ background: '#080c14' }}>
+      <div style={{ background: '#0a0f1e' }}>
         <Partners />
       </div>
 
-      <div style={{ background: 'linear-gradient(180deg, #080c14 0%, #0d1525 100%)' }}>
+      <div style={{ background: '#0d1117' }}>
         <GetInvolved />
       </div>
 
-      <div style={{ background: '#060910' }}>
+      <div style={{ background: '#080c14' }}>
         <Footer />
       </div>
 

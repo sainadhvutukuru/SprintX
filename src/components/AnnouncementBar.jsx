@@ -1,4 +1,14 @@
+import { useState, useEffect } from 'react'
+
 function AnnouncementBar() {
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setHidden(window.scrollY > 0)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <div style={{
       backgroundColor: '#c94f1a',
@@ -12,8 +22,10 @@ function AnnouncementBar() {
       justifyContent: 'center',
       gap: '8px',
       cursor: 'pointer',
+      transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+      transition: 'transform 0.3s ease',
     }}>
-      ⚡ Press Launch Event — June 10, 2026 · Hyderabad · India's Sports Innovation Era Begins →
+      ⚡ Press Launch Event — June 15, 2026 · Hyderabad · India's Sports Innovation Era Begins →
     </div>
   )
 }

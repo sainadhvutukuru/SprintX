@@ -22,11 +22,13 @@ const comparison = [
   { others: 'Single-stage program', sprintx: 'Idea to scale' },
   { others: 'No market access', sprintx: 'Federation & league access' },
   { others: 'No investor network', sprintx: 'Built-in Investor Circle' },
-  { others: 'No grassroots pipeline', sprintx: 'South Clan network' },
   { others: 'Event or course only', sprintx: 'Full accelerator program' },
 ]
 
+import { useState } from 'react'
+
 function Edge() {
+  const [hovered, setHovered] = useState(null)
   return (
     <section style={{
       padding: '40px 80px',
@@ -55,8 +57,10 @@ function Edge() {
 
         {/* TITLE */}
         <h2 style={{
-          fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: 'clamp(48px, 5vw, 72px)',
+          fontFamily: "'Rajdhani', sans-serif",
+          fontSize: '72px',
+          fontWeight: '700',
+          textTransform: 'uppercase',
           lineHeight: '1.05',
           color: '#fff',
           marginBottom: '20px',
@@ -79,32 +83,39 @@ function Edge() {
         {/* FEATURE LIST */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {features.map((f) => (
-            <div key={f.title} style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '16px',
-              padding: '20px',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: '10px',
-              background: 'rgba(255,255,255,0.02)',
-            }}>
+            <div key={f.title}
+              onMouseEnter={() => setHovered(f.title)}
+              onMouseLeave={() => setHovered(null)}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '16px',
+                padding: '20px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderLeft: hovered === f.title ? '3px solid #1db97a' : '3px solid transparent',
+                borderRadius: '10px',
+                background: hovered === f.title ? 'rgba(29,185,122,0.06)' : 'rgba(255,255,255,0.02)',
+                transform: hovered === f.title ? 'translateY(-2px)' : 'translateY(0)',
+                transition: 'all 0.25s ease',
+              }}>
               <div style={{
                 width: '28px',
                 height: '28px',
                 borderRadius: '6px',
-                background: 'rgba(26,168,138,0.15)',
+                background: hovered === f.title ? 'rgba(29,185,122,0.3)' : 'rgba(29,185,122,0.15)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: '0',
-                color: '#1aa88a',
+                color: '#1db97a',
                 fontSize: '14px',
                 fontWeight: '700',
+                transition: 'background 0.25s ease',
               }}>
                 ✓
               </div>
               <div>
-                <p style={{ fontSize: '15px', fontWeight: '600', color: '#fff', marginBottom: '4px' }}>{f.title}</p>
+                <p style={{ fontSize: '15px', fontWeight: '600', color: '#ffffff', marginBottom: '4px' }}>{f.title}</p>
                 <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>{f.desc}</p>
               </div>
             </div>

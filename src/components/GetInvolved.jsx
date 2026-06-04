@@ -41,7 +41,6 @@ function GetInvolved() {
         margin: '0 auto',
         textAlign: 'center',
       }}>
-
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -55,10 +54,11 @@ function GetInvolved() {
           </span>
           <div style={{ width: '32px', height: '2px', background: '#f15b26' }} />
         </div>
-
         <h2 style={{
-          fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: 'clamp(48px, 7vw, 90px)',
+          fontFamily: "'Rajdhani', sans-serif",
+          fontSize: '96px',
+          fontWeight: '700',
+          textTransform: 'uppercase',
           lineHeight: '1',
           color: '#fff',
           marginBottom: '12px',
@@ -66,7 +66,6 @@ function GetInvolved() {
           YOUR MOVE. <br />
           <span style={{ color: '#f15b26' }}>MAKE IT.</span>
         </h2>
-
         <p style={{
           fontSize: '15px',
           color: '#777',
@@ -75,7 +74,6 @@ function GetInvolved() {
         }}>
           India's sports innovation era is starting. Be part of it from day one.
         </p>
-
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
@@ -132,7 +130,6 @@ function GetInvolved() {
             </div>
           ))}
         </div>
-
       </section>
 
       <StartupFormModal

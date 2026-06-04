@@ -4,40 +4,37 @@ const programs = [
     stage: 'Idea Stage',
     name: 'SPARK',
     desc: 'From idea to validated MVP',
-    duration: '3–8 Months',
-    tracks: 'University + Open',
-    fee: 'Rs 10,000–15,000',
-    who: 'Students · Athletes · Early Founders',
+    body: 'Built for the sports-tech idea that deserves more than just feedback. Through structured mentorship and hands-on sessions, on campus or online, you leave with a validated MVP, a business model that holds up, and a clear path to what comes next.',
+    btnText: 'Check Spark Programs →',
     btnColor: '#c94f1a',
-    nameColor: '#c94f1a',
+    headerBg: 'linear-gradient(135deg, rgba(226,90,28,0.15), rgba(226,90,28,0.04))',
   },
   {
     number: '02',
     stage: 'MVP Stage',
     name: 'STRIDE',
     desc: 'From first product to first revenue',
-    duration: '16–20 Weeks',
-    equity: '1%–2%',
-    fee: 'Rs 25,000–30,000',
-    who: 'Founders with Working MVP',
+    body: 'The gap between a working product and real revenue is where most sports-tech startups stall. Stride closes it, with structured support on market fit, sales strategy, and the pilot deployments that make the business real.',
+    btnText: 'Check Stride Programs →',
     btnColor: '#1aa88a',
-    nameColor: '#4aacef',
+    headerBg: 'linear-gradient(135deg, rgba(25,165,116,0.15), rgba(25,165,116,0.04))',
   },
   {
     number: '03',
     stage: 'Scale Stage',
     name: 'SPRINTX',
     desc: 'From revenue to scale',
-    duration: '24 Weeks',
-    equity: '3%–5% (Cohorts 1–3)',
-    fee: 'No Fee — Cohorts 1–3',
-    who: 'Revenue-Stage Founders',
+    body: 'The flagship program for founders who are done testing and ready to scale. A structured 24-week journey of deep mentorship, curated investor access, and strategic accountability that turns a promising sports-tech startup into a company worth funding.',
+    btnText: 'Check Sprintx Programs →',
     btnColor: '#4aacef',
-    nameColor: '#4aacef',
+    headerBg: 'linear-gradient(135deg, rgba(27,126,200,0.15), rgba(27,126,200,0.04))',
   },
 ]
 
+import { useState } from 'react'
+
 function Programs() {
+  const [hoveredCard, setHoveredCard] = useState(null)
   return (
     <section style={{
       padding: '40px 80px',
@@ -87,86 +84,99 @@ function Programs() {
         gap: '20px',
       }}>
         {programs.map((p) => (
-          <div key={p.name} style={{
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '12px',
-            padding: '32px 28px',
-            background: 'rgba(255,255,255,0.02)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
-            position: 'relative',
-          }}>
-
-            {/* NUMBER + STAGE */}
-            <div style={{
+          <div key={p.name}
+            onMouseEnter={() => setHoveredCard(p.name)}
+            onMouseLeave={() => setHoveredCard(null)}
+            style={{
+              border: `1px solid ${hoveredCard === p.name ? p.btnColor : 'rgba(255,255,255,0.08)'}`,
+              borderRadius: '12px',
+              overflow: 'hidden',
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-            }}>
-              <div>
-                <p style={{ fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', color: '#555', marginBottom: '8px' }}>
-                  {p.stage}
-                </p>
-                <h3 style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: '48px',
-                  color: p.nameColor,
-                  lineHeight: '1',
-                }}>
-                  {p.name}
-                </h3>
-                <p style={{ fontSize: '13px', color: '#555', marginTop: '6px' }}>{p.desc}</p>
-              </div>
-              <span style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: '64px',
-                color: 'rgba(255,255,255,0.06)',
-                lineHeight: '1',
-              }}>
-                {p.number}
-              </span>
-            </div>
-
-            {/* DIVIDER */}
-            <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
-
-            {/* DETAILS */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {[
-                { label: 'Duration', value: p.duration },
-                { label: p.tracks ? 'Tracks' : 'Equity', value: p.tracks || p.equity },
-                { label: 'Fee', value: p.fee },
-                { label: 'Who', value: p.who },
-              ].map((row) => (
-                <div key={row.label} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                  <span style={{ fontSize: '13px', color: '#555' }}>{row.label}</span>
-                  <span style={{ fontSize: '13px', color: '#fff', fontWeight: '500', textAlign: 'right', maxWidth: '60%' }}>
-                    {row.value}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* BUTTON */}
-            <button style={{
-              marginTop: 'auto',
-              padding: '12px',
-              borderRadius: '7px',
-              fontSize: '14px',
-              fontWeight: '600',
-              border: 'none',
-              background: p.btnColor,
-              color: '#fff',
-              width: '100%',
+              flexDirection: 'column',
+              minWidth: '360px',
+              transform: hoveredCard === p.name ? 'translateY(-6px)' : 'translateY(0)',
+              boxShadow: hoveredCard === p.name ? `0 12px 40px ${p.btnColor}30` : 'none',
+              transition: 'all 0.3s ease',
               cursor: 'pointer',
             }}>
-              Connect Your Startup →
-            </button>
+
+            {/* HEADER with tint */}
+            <div style={{
+              padding: '32px 28px 0',
+              background: p.headerBg,
+              position: 'relative',
+            }}>
+
+              <div>
+                <div>
+                  <p style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#555', marginBottom: '8px' }}>
+                    {p.stage}
+                  </p>
+                  <h3 style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontSize: '48px',
+                    fontWeight: '800',
+                    color: '#ffffff',
+                    lineHeight: '1',
+                    textTransform: 'uppercase',
+                  }}>
+                    {p.name}
+                  </h3>
+                  <p style={{ fontSize: '13px', color: '#555', marginTop: '6px' }}>{p.desc}</p>
+                </div>
+                <span style={{
+                  fontFamily: "'Rajdhani', sans-serif",
+                  fontSize: '72px',
+                  fontWeight: '700',
+                  lineHeight: '1',
+                  opacity: '0.08',
+                  position: 'absolute',
+                  top: '16px',
+                  right: '24px',
+                }}>
+                  {p.number}
+                </span>
+              </div>
+
+              <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginTop: '20px' }} />
+
+            </div>
+
+            {/* BODY — neutral */}
+            <div style={{
+              padding: '20px 28px 32px',
+              background: hoveredCard === p.name ? `${p.btnColor}08` : 'rgba(255,255,255,0.02)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+              flex: '1',
+            }}>
+
+              <p style={{
+                fontSize: '15px',
+                color: 'rgba(255,255,255,0.6)',
+                lineHeight: '1.7',
+                fontWeight: '400',
+              }}>
+                {p.body}
+              </p>
+
+              <button style={{
+                marginTop: 'auto',
+                padding: '12px',
+                borderRadius: '7px',
+                fontSize: '14px',
+                fontWeight: '600',
+                border: 'none',
+                background: p.btnColor,
+                color: '#fff',
+                width: '100%',
+                cursor: 'pointer',
+              }}>
+                {p.btnText}
+              </button>
+
+            </div>
 
           </div>
         ))}

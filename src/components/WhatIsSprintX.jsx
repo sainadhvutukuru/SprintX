@@ -1,12 +1,14 @@
 const ecosystem = [
-  { color: '#c94f1a', name: 'Inve Sports Venture', role: 'Holding Company' },
-  { color: '#4aacef', name: 'SprintX', role: 'Innovation Platform' },
-  { color: '#1aa88a', name: 'Sports Tech Podium', role: 'Discovery Engine' },
-  { color: '#d4a017', name: 'South Clan', role: 'Grassroots Partner' },
-  { color: '#9b59b6', name: 'Network+', role: 'Industry Network' },
+  { color: '#e05c1a', name: 'Inve Sports Venture', role: 'Holding Company' },
+  { color: '#4fa3e0', name: 'SprintX', role: 'Innovation Platform' },
+  { color: '#1db97a', name: 'Sports Tech Podium', role: 'Discovery Engine' },
+  { color: '#7c3aed', name: 'Network+', role: 'Industry Network' },
 ]
 
+import { useState } from 'react'
+
 function WhatIsSprintX() {
+  const [hovered, setHovered] = useState(null)
   return (
     <section style={{
       padding: '40px 80px',
@@ -91,24 +93,34 @@ function WhatIsSprintX() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {ecosystem.map((item) => (
-            <div key={item.name} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '18px 20px',
-              border: '1px solid rgba(255,255,255,0.08)',
-              borderRadius: '8px',
-              background: 'rgba(255,255,255,0.02)',
-            }}>
+            <div key={item.name}
+              onMouseEnter={() => setHovered(item.name)}
+              onMouseLeave={() => setHovered(null)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '18px 20px',
+                paddingLeft: hovered === item.name ? '26px' : '20px',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderLeft: hovered === item.name ? `3px solid ${item.color}` : '3px solid transparent',
+                borderRadius: '8px',
+                background: hovered === item.name ? `${item.color}0f` : 'rgba(255,255,255,0.02)',
+                transition: 'all 0.25s ease',
+              }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{
                   width: '10px', height: '10px',
                   borderRadius: '50%',
                   background: item.color,
                 }} />
-                <span style={{ fontSize: '15px', fontWeight: '600', color: '#fff' }}>{item.name}</span>
+                <span style={{ fontSize: '15px', fontWeight: '600', color: '#ffffff' }}>{item.name}</span>
               </div>
-              <span style={{ fontSize: '13px', color: '#555' }}>{item.role}</span>
+              <span style={{
+                fontSize: '13px',
+                color: hovered === item.name ? '#999' : '#555',
+                transition: 'color 0.25s ease',
+              }}>{item.role}</span>
             </div>
           ))}
         </div>

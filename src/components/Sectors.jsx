@@ -3,30 +3,43 @@ const sectors = [
     icon: '⚡',
     name: 'SPORTS TECH',
     tags: ['AI Analytics', 'Performance', 'Smart Infra'],
+    borderColor: '#e05c1a',
+    bgTint: 'rgba(224, 92, 26, 0.08)',
   },
   {
     icon: '💪',
     name: 'WELLNESS & FITNESS',
     tags: ['Health Tech', 'Nutrition', 'Fan Engagement'],
+    borderColor: '#2d8fdd',
+    bgTint: 'rgba(45, 143, 221, 0.08)',
   },
   {
     icon: '🎮',
     name: 'ESPORTS & GAMING',
     tags: ['Broadcasting', 'Content', 'League Ops'],
+    borderColor: '#1db97a',
+    bgTint: 'rgba(29, 185, 122, 0.08)',
   },
   {
     icon: '🛒',
     name: 'SPORTS COMMERCE',
     tags: ['Merchandising', 'Ticketing', 'Marketplace'],
+    borderColor: '#d4a017',
+    bgTint: 'rgba(212, 160, 23, 0.08)',
   },
   {
     icon: '🎓',
     name: 'SPORTS EDUCATION',
     tags: ['Grassroots', 'Academy', 'Coaching Tech'],
+    borderColor: '#7c3aed',
+    bgTint: 'rgba(124, 58, 237, 0.08)',
   },
 ]
 
+import { useState } from 'react'
+
 function Sectors() {
+  const [hovered, setHovered] = useState(null)
   return (
     <section style={{
       padding: '40px 80px',
@@ -49,8 +62,10 @@ function Sectors() {
 
       {/* TITLE */}
       <h2 style={{
-        fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: 'clamp(48px, 6vw, 80px)',
+        fontFamily: "'Rajdhani', sans-serif",
+        fontSize: '72px',
+        fontWeight: '700',
+        textTransform: 'uppercase',
         lineHeight: '1.05',
         color: '#fff',
         marginBottom: '60px',
@@ -65,17 +80,23 @@ function Sectors() {
         gap: '16px',
       }}>
         {sectors.map((s) => (
-          <div key={s.name} style={{
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '12px',
-            padding: '32px 20px',
-            background: 'rgba(255,255,255,0.02)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '16px',
-            textAlign: 'center',
-          }}>
+          <div key={s.name}
+            onMouseEnter={() => setHovered(s.name)}
+            onMouseLeave={() => setHovered(null)}
+            style={{
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderBottom: `3px solid ${hovered === s.name ? s.borderColor : 'transparent'}`,
+              borderRadius: '12px',
+              padding: '32px 20px',
+              background: hovered === s.name ? s.bgTint : 'rgba(255,255,255,0.02)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '16px',
+              textAlign: 'center',
+              transform: hovered === s.name ? 'translateY(-4px)' : 'translateY(0)',
+              transition: 'all 0.3s ease',
+            }}>
 
             {/* ICON */}
             <div style={{ fontSize: '36px' }}>{s.icon}</div>

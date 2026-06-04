@@ -11,15 +11,33 @@ function InvestorFormModal({ isOpen, onClose }) {
     sectors: '',
     anything: '',
   })
+  const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
 
   if (!isOpen) return null
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    setErrors({ ...errors, [e.target.name]: '' })
+  }
+
+  const validate = () => {
+    const newErrors = {}
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required'
+    if (!formData.email.trim()) newErrors.email = 'Email is required'
+    if (!formData.orgName.trim()) newErrors.orgName = 'Organisation name is required'
+    if (!formData.investorType) newErrors.investorType = 'Investor type is required'
+    if (formData.investorType === 'other' && !formData.otherInvestorType.trim()) {
+      newErrors.otherInvestorType = 'Please specify your investor type'
+    }
+    if (!formData.sectors.trim()) newErrors.sectors = 'Sectors of interest is required'
+    if (!formData.anything.trim()) newErrors.anything = 'This field is required'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async () => {
+    if (!validate()) return
     setSubmitting(true)
     try {
       // Send to Formspree
@@ -45,6 +63,7 @@ function InvestorFormModal({ isOpen, onClose }) {
         fullName: '', email: '', orgName: '',
         investorType: '', otherInvestorType: '', sectors: '', anything: '',
       })
+      setErrors({})
       onClose()
 
     } catch (error) {
@@ -54,15 +73,19 @@ function InvestorFormModal({ isOpen, onClose }) {
     setSubmitting(false)
   }
 
-  const inputStyle = {
+  const inputStyle = (hasError) => ({
     width: '100%',
     padding: '12px 14px',
-    border: '1px solid rgba(255,255,255,0.1)',
+    border: hasError ? '1px solid #ff4444' : '1px solid rgba(255,255,255,0.1)',
     borderRadius: '8px',
     color: '#fff',
     fontSize: '14px',
     outline: 'none',
     backgroundColor: '#1a2035',
+  })
+
+  const errorMsgStyle = {
+    fontSize: '12px', color: '#ff4444', marginTop: '4px',
   }
 
   const labelStyle = {
@@ -117,25 +140,28 @@ function InvestorFormModal({ isOpen, onClose }) {
             <div>
               <label style={labelStyle}>Full Name *</label>
               <input name="fullName" placeholder="Your name"
-                value={formData.fullName} onChange={handleChange} style={inputStyle} />
+                value={formData.fullName} onChange={handleChange} style={inputStyle(!!errors.fullName)} />
+              {errors.fullName && <p style={errorMsgStyle}>{errors.fullName}</p>}
             </div>
             <div>
               <label style={labelStyle}>Email *</label>
               <input name="email" placeholder="you@fund.com"
-                value={formData.email} onChange={handleChange} style={inputStyle} />
+                value={formData.email} onChange={handleChange} style={inputStyle(!!errors.email)} />
+              {errors.email && <p style={errorMsgStyle}>{errors.email}</p>}
             </div>
           </div>
 
           <div>
-            <label style={labelStyle}>Organisation / Fund Name</label>
+            <label style={labelStyle}>Organisation / Fund Name *</label>
             <input name="orgName" placeholder="Fund or company name"
-              value={formData.orgName} onChange={handleChange} style={inputStyle} />
+              value={formData.orgName} onChange={handleChange} style={inputStyle(!!errors.orgName)} />
+            {errors.orgName && <p style={errorMsgStyle}>{errors.orgName}</p>}
           </div>
 
           <div>
             <label style={labelStyle}>Investor Type *</label>
             <select name="investorType" value={formData.investorType}
-              onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}>
+              onChange={handleChange} style={{ ...inputStyle(!!errors.investorType), cursor: 'pointer' }}>
               <option value="">Select type</option>
               <option value="angel">Angel Investor</option>
               <option value="vc">Venture Capital Fund</option>
@@ -144,6 +170,7 @@ function InvestorFormModal({ isOpen, onClose }) {
               <option value="government">Government Fund</option>
               <option value="other">Other</option>
             </select>
+            {errors.investorType && <p style={errorMsgStyle}>{errors.investorType}</p>}
           </div>
 
           {formData.investorType === 'other' && (
@@ -151,22 +178,25 @@ function InvestorFormModal({ isOpen, onClose }) {
               <label style={labelStyle}>Please specify your investor type *</label>
               <input name="otherInvestorType"
                 placeholder="Tell us about your investment type..."
-                value={formData.otherInvestorType} onChange={handleChange} style={inputStyle} />
+                value={formData.otherInvestorType} onChange={handleChange} style={inputStyle(!!errors.otherInvestorType)} />
+              {errors.otherInvestorType && <p style={errorMsgStyle}>{errors.otherInvestorType}</p>}
             </div>
           )}
 
           <div>
-            <label style={labelStyle}>Sectors of Interest</label>
+            <label style={labelStyle}>Sectors of Interest *</label>
             <input name="sectors" placeholder="e.g. Sports Tech, eSports, Wellness"
-              value={formData.sectors} onChange={handleChange} style={inputStyle} />
+              value={formData.sectors} onChange={handleChange} style={inputStyle(!!errors.sectors)} />
+            {errors.sectors && <p style={errorMsgStyle}>{errors.sectors}</p>}
           </div>
 
           <div>
-            <label style={labelStyle}>Anything else we should know?</label>
+            <label style={labelStyle}>Anything else we should know? *</label>
             <textarea name="anything"
               placeholder="Typical check size, stage preference, or how you'd like to engage with SprintX..."
               value={formData.anything} onChange={handleChange}
-              rows={3} style={{ ...inputStyle, resize: 'none' }} />
+              rows={3} style={{ ...inputStyle(!!errors.anything), resize: 'none' }} />
+            {errors.anything && <p style={errorMsgStyle}>{errors.anything}</p>}
           </div>
 
           <button

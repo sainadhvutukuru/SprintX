@@ -11,18 +11,35 @@ function MentorFormModal({ isOpen, onClose }) {
     linkedin: '',
     contribution: '',
   })
+  const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
 
   if (!isOpen) return null
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    setErrors({ ...errors, [e.target.name]: '' })
+  }
+
+  const validate = () => {
+    const newErrors = {}
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required'
+    if (!formData.email.trim()) newErrors.email = 'Email is required'
+    if (!formData.roleOrg.trim()) newErrors.roleOrg = 'Role & Organisation is required'
+    if (!formData.expertise) newErrors.expertise = 'Area of expertise is required'
+    if (formData.expertise === 'other' && !formData.otherExpertise.trim()) {
+      newErrors.otherExpertise = 'Please specify your expertise'
+    }
+    if (!formData.linkedin.trim()) newErrors.linkedin = 'LinkedIn profile is required'
+    if (!formData.contribution.trim()) newErrors.contribution = 'This field is required'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async () => {
+    if (!validate()) return
     setSubmitting(true)
     try {
-      // Send to Formspree
       await fetch(FORMSPREE_URL, {
         method: 'POST',
         headers: {
@@ -32,8 +49,7 @@ function MentorFormModal({ isOpen, onClose }) {
         body: JSON.stringify({ ...formData, formType: 'Mentor Form' }),
       })
 
-      // Send to Google Sheets (no-cors is needed because Google Apps Script doesn't support CORS preflight)
-      const sheetsRes = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+      await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -45,6 +61,7 @@ function MentorFormModal({ isOpen, onClose }) {
         fullName: '', email: '', roleOrg: '',
         expertise: '', otherExpertise: '', linkedin: '', contribution: '',
       })
+      setErrors({})
       onClose()
 
     } catch (error) {
@@ -54,15 +71,19 @@ function MentorFormModal({ isOpen, onClose }) {
     setSubmitting(false)
   }
 
-  const inputStyle = {
+  const inputStyle = (hasError) => ({
     width: '100%',
     padding: '12px 14px',
-    border: '1px solid rgba(255,255,255,0.1)',
+    border: hasError ? '1px solid #ff4444' : '1px solid rgba(255,255,255,0.1)',
     borderRadius: '8px',
     color: '#fff',
     fontSize: '14px',
     outline: 'none',
     backgroundColor: '#1a2035',
+  })
+
+  const errorMsgStyle = {
+    fontSize: '12px', color: '#ff4444', marginTop: '4px',
   }
 
   const labelStyle = {
@@ -117,25 +138,28 @@ function MentorFormModal({ isOpen, onClose }) {
             <div>
               <label style={labelStyle}>Full Name *</label>
               <input name="fullName" placeholder="Your name"
-                value={formData.fullName} onChange={handleChange} style={inputStyle} />
+                value={formData.fullName} onChange={handleChange} style={inputStyle(!!errors.fullName)} />
+              {errors.fullName && <p style={errorMsgStyle}>{errors.fullName}</p>}
             </div>
             <div>
               <label style={labelStyle}>Email *</label>
               <input name="email" placeholder="you@domain.com"
-                value={formData.email} onChange={handleChange} style={inputStyle} />
+                value={formData.email} onChange={handleChange} style={inputStyle(!!errors.email)} />
+              {errors.email && <p style={errorMsgStyle}>{errors.email}</p>}
             </div>
           </div>
 
           <div>
             <label style={labelStyle}>Current Role & Organisation *</label>
             <input name="roleOrg" placeholder="e.g. CEO at XYZ Sports"
-              value={formData.roleOrg} onChange={handleChange} style={inputStyle} />
+              value={formData.roleOrg} onChange={handleChange} style={inputStyle(!!errors.roleOrg)} />
+            {errors.roleOrg && <p style={errorMsgStyle}>{errors.roleOrg}</p>}
           </div>
 
           <div>
             <label style={labelStyle}>Area of Expertise *</label>
             <select name="expertise" value={formData.expertise}
-              onChange={handleChange} style={{ ...inputStyle, cursor: 'pointer' }}>
+              onChange={handleChange} style={{ ...inputStyle(!!errors.expertise), cursor: 'pointer' }}>
               <option value="">Select expertise</option>
               <option value="federation">Sports Federation & League Operations</option>
               <option value="athlete">Professional Athlete / Coach</option>
@@ -149,28 +173,32 @@ function MentorFormModal({ isOpen, onClose }) {
               <option value="legal">Legal & Compliance</option>
               <option value="other">Other</option>
             </select>
+            {errors.expertise && <p style={errorMsgStyle}>{errors.expertise}</p>}
           </div>
 
           {formData.expertise === 'other' && (
             <div>
               <label style={labelStyle}>Please specify *</label>
               <input name="otherExpertise" placeholder="Tell us about your expertise..."
-                value={formData.otherExpertise} onChange={handleChange} style={inputStyle} />
+                value={formData.otherExpertise} onChange={handleChange} style={inputStyle(!!errors.otherExpertise)} />
+              {errors.otherExpertise && <p style={errorMsgStyle}>{errors.otherExpertise}</p>}
             </div>
           )}
 
           <div>
-            <label style={labelStyle}>LinkedIn Profile</label>
+            <label style={labelStyle}>LinkedIn Profile *</label>
             <input name="linkedin" placeholder="linkedin.com/in/yourprofile"
-              value={formData.linkedin} onChange={handleChange} style={inputStyle} />
+              value={formData.linkedin} onChange={handleChange} style={inputStyle(!!errors.linkedin)} />
+            {errors.linkedin && <p style={errorMsgStyle}>{errors.linkedin}</p>}
           </div>
 
           <div>
-            <label style={labelStyle}>How would you like to contribute?</label>
+            <label style={labelStyle}>How would you like to contribute? *</label>
             <textarea name="contribution"
               placeholder="Tell us about your experience and how you'd like to support sports-tech founders..."
               value={formData.contribution} onChange={handleChange}
-              rows={3} style={{ ...inputStyle, resize: 'none' }} />
+              rows={3} style={{ ...inputStyle(!!errors.contribution), resize: 'none' }} />
+            {errors.contribution && <p style={errorMsgStyle}>{errors.contribution}</p>}
           </div>
 
           <button

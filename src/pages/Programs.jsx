@@ -17,6 +17,7 @@ const programs = [
     tracks: 'University + Open',
     domain: 'idea',
     btnColor: '#f15b26',
+    headerBg: '#1a0e06',
   },
   {
     icon: '⚡',
@@ -31,6 +32,7 @@ const programs = [
     equity: '1%–2%',
     domain: 'mvp',
     btnColor: '#1586c8',
+    headerBg: '#061a10',
   },
   {
     icon: '🏆',
@@ -45,6 +47,7 @@ const programs = [
     equity: '3%–5% (Cohorts 1–3)',
     domain: 'scale',
     btnColor: '#f15b26',
+    headerBg: '#061018',
   },
 ]
 
@@ -207,69 +210,90 @@ function ProgramsPage() {
               style={{
                 border: `1px solid ${hoveredCard === p.name ? p.btnColor : 'rgba(255,255,255,0.08)'}`,
                 borderRadius: '12px',
-                padding: '28px',
-                background: hoveredCard === p.name ? `${p.btnColor}10` : 'rgba(255,255,255,0.02)',
+                overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '14px',
                 transform: hoveredCard === p.name ? 'translateY(-6px)' : 'translateY(0)',
                 boxShadow: hoveredCard === p.name ? `0 12px 40px ${p.btnColor}30` : 'none',
                 transition: 'all 0.3s ease',
                 cursor: 'pointer',
               }}>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{
-                  fontSize: '28px', width: '48px', height: '48px',
-                  borderRadius: '10px', background: 'rgba(255,255,255,0.05)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {p.icon}
-                </div>
-                <span style={{
-                  fontSize: '11px', fontWeight: '700', letterSpacing: '1px',
-                  background: `${p.badgeColor}20`, color: p.badgeColor,
-                  padding: '4px 12px', borderRadius: '999px',
-                  border: `1px solid ${p.badgeColor}40`,
-                }}>
-                  {p.badge}
-                </span>
-              </div>
-
-              <div>
-                <p style={{ fontSize: '11px', color: '#555', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
-                  {p.stage}
-                </p>
-                <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#fff' }}>{p.name}</h3>
-              </div>
-
-              <p style={{ fontSize: '14px', color: '#666', lineHeight: '1.65', flex: '1' }}>{p.desc}</p>
-
-              <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {[
-                  { label: 'Duration', value: p.duration },
-                  { label: p.tracks ? 'Tracks' : 'Equity', value: p.tracks || p.equity },
-                  { label: 'Fee', value: p.fee },
-                  { label: 'Who', value: p.who },
-                ].map((row) => (
-                  <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '12px', color: '#555' }}>{row.label}</span>
-                    <span style={{ fontSize: '12px', color: '#ccc', fontWeight: '500', textAlign: 'right', maxWidth: '60%' }}>
-                      {row.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <button style={{
-                padding: '12px', borderRadius: '7px', fontSize: '14px',
-                fontWeight: '600', border: 'none', background: p.btnColor,
-                color: '#fff', width: '100%', cursor: 'pointer', marginTop: '4px',
+              {/* HEADER with tint */}
+              <div style={{
+                padding: '28px 28px 0',
+                background: p.headerBg,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px',
               }}>
-                Apply Now →
-              </button>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{
+                    fontSize: '28px', width: '48px', height: '48px',
+                    borderRadius: '10px', background: 'rgba(255,255,255,0.05)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    {p.icon}
+                  </div>
+                  <span style={{
+                    fontSize: '11px', fontWeight: '700', letterSpacing: '1px',
+                    background: `${p.badgeColor}20`, color: p.badgeColor,
+                    padding: '4px 12px', borderRadius: '999px',
+                    border: `1px solid ${p.badgeColor}40`,
+                  }}>
+                    {p.badge}
+                  </span>
+                </div>
+
+                <div>
+                  <p style={{ fontSize: '11px', color: '#555', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    {p.stage}
+                  </p>
+                  <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#fff' }}>{p.name}</h3>
+                </div>
+
+                <p style={{ fontSize: '14px', color: '#666', lineHeight: '1.65' }}>{p.desc}</p>
+
+                <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+
+              </div>
+
+              {/* BODY — neutral */}
+              <div style={{
+                padding: '14px 28px 28px',
+                background: hoveredCard === p.name ? `${p.btnColor}10` : 'rgba(255,255,255,0.02)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px',
+                flex: '1',
+              }}>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[
+                    { label: 'Duration', value: p.duration },
+                    { label: p.tracks ? 'Tracks' : 'Equity', value: p.tracks || p.equity },
+                    { label: 'Fee', value: p.fee },
+                    { label: 'Who', value: p.who },
+                  ].map((row) => (
+                    <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontSize: '12px', color: '#555' }}>{row.label}</span>
+                      <span style={{ fontSize: '12px', color: '#ccc', fontWeight: '500', textAlign: 'right', maxWidth: '60%' }}>
+                        {row.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <button style={{
+                  padding: '12px', borderRadius: '7px', fontSize: '14px',
+                  fontWeight: '600', border: 'none', background: p.btnColor,
+                  color: '#fff', width: '100%', cursor: 'pointer', marginTop: '4px',
+                }}>
+                  Apply Now →
+                </button>
+
+              </div>
 
             </div>
           ))}
