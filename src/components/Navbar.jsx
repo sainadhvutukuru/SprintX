@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 // import logo from '../assets/Sprintx Official Logo.png'
-import logo from '../assets/SprintX.png'
+import logo from '../assets/Sprintx.png'
 
 function Navbar() {
   const location = useLocation()

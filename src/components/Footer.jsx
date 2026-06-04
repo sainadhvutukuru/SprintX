@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import logo from '../assets/SprintX.png'
+import logo from '../assets/Sprintx.png'
 
 const socialIcons = [
   {
