@@ -1,82 +1,91 @@
-import { useState } from 'react'
-
 function StatsBar() {
-  const [hovered, setHovered] = useState(null)
   return (
-    <section style={{
+    <section className="stats-grid" style={{
+      background: 'rgba(8,17,30,1)',
       borderTop: '1px solid rgba(255,255,255,0.08)',
       borderBottom: '1px solid rgba(255,255,255,0.08)',
       display: 'grid',
       gridTemplateColumns: 'repeat(4, 1fr)',
     }}>
+      <style>{`
+.stat-item {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease;
+  cursor: pointer;
+}
+.stat-item:hover {
+  background: rgba(224, 92, 26, 0.06);
+}
+.stat-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: #E25A1C;
+  transition: width 0.4s;
+}
+.stat-item:hover::after {
+  width: 60%;
+}
+@media (max-width: 1023px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 767px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .stat-item { padding: 20px 12px !important; }
+  .stat-number { font-size: 28px !important; }
+  .stat-label { font-size: 9.5px !important; }
+  .stat-subtitle { font-size: 11px !important; }
+}
+`}</style>
 
       {/* OFFICIAL LAUNCH */}
-      <div
-        onMouseEnter={() => setHovered('launch')}
-        onMouseLeave={() => setHovered(null)}
-        style={{
-          padding: '32px 40px',
-          borderRight: '1px solid rgba(255,255,255,0.08)',
-          borderBottom: `3px solid ${hovered === 'launch' ? '#e05c1a' : 'transparent'}`,
-          background: hovered === 'launch' ? 'rgba(224, 92, 26, 0.06)' : 'transparent',
-          textAlign: 'center',
-          transition: 'all 0.3s ease',
-        }}>
-        <p style={{ fontSize: '11px', letterSpacing: '2px', color: '#555', textTransform: 'uppercase', marginBottom: '12px' }}>Accelerator Program Launch</p>
-        <p style={{ fontSize: '32px', fontWeight: '700', color: '#fff' }}>
-          <span style={{ color: '#c94f1a' }}>Sep</span> 2026
+      <div className="stat-item" style={{
+        padding: '32px 40px',
+        borderRight: '1px solid rgba(255,255,255,0.08)',
+        textAlign: 'center',
+      }}>
+        <p className="stat-label" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: '500', letterSpacing: '1.2px', color: 'rgba(255,255,255,0.30)', textTransform: 'uppercase', marginBottom: '8px' }}>Accelerator Program Launch</p>
+        <p className="stat-number" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '38px', fontWeight: '700', color: '#ffffff' }}>
+          <span style={{ color: '#E25A1C' }}>Sep</span> 2026
         </p>
-        <p style={{ fontSize: '13px', color: '#555', marginTop: '6px' }}>Hyderabad, India</p>
+        <p className="stat-subtitle" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.50)', marginTop: '4px' }}>Hyderabad, India</p>
       </div>
 
       {/* ACCELERATOR PROGRAMS */}
-      <div
-        onMouseEnter={() => setHovered('programs')}
-        onMouseLeave={() => setHovered(null)}
-        style={{
-          padding: '32px 40px',
-          borderRight: '1px solid rgba(255,255,255,0.08)',
-          borderBottom: `3px solid ${hovered === 'programs' ? '#e05c1a' : 'transparent'}`,
-          background: hovered === 'programs' ? 'rgba(224, 92, 26, 0.06)' : 'transparent',
-          textAlign: 'center',
-          transition: 'all 0.3s ease',
-        }}>
-        <p style={{ fontSize: '11px', letterSpacing: '2px', color: '#555', textTransform: 'uppercase', marginBottom: '12px' }}>Accelerator Programs</p>
-        <p style={{ fontSize: '32px', fontWeight: '700', color: '#c94f1a' }}>3</p>
-        <p style={{ fontSize: '13px', color: '#555', marginTop: '6px' }}>Spark · Stride · SprintX</p>
+      <div className="stat-item" style={{
+        padding: '32px 40px',
+        borderRight: '1px solid rgba(255,255,255,0.08)',
+        textAlign: 'center',
+      }}>
+        <p className="stat-label" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: '500', letterSpacing: '1.2px', color: 'rgba(255,255,255,0.30)', textTransform: 'uppercase', marginBottom: '8px' }}>Accelerator Programs</p>
+        <p className="stat-number" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '38px', fontWeight: '700', color: '#ffffff' }}>3</p>
+        <p className="stat-subtitle" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.50)', marginTop: '4px' }}>Spark · Stride · SprintX</p>
       </div>
 
       {/* SPORTS-TECH SECTORS */}
-      <div
-        onMouseEnter={() => setHovered('sectors')}
-        onMouseLeave={() => setHovered(null)}
-        style={{
-          padding: '32px 40px',
-          borderRight: '1px solid rgba(255,255,255,0.08)',
-          borderBottom: `3px solid ${hovered === 'sectors' ? '#e05c1a' : 'transparent'}`,
-          background: hovered === 'sectors' ? 'rgba(224, 92, 26, 0.06)' : 'transparent',
-          textAlign: 'center',
-          transition: 'all 0.3s ease',
-        }}>
-        <p style={{ fontSize: '11px', letterSpacing: '2px', color: '#555', textTransform: 'uppercase', marginBottom: '12px' }}>Sports-Tech Sectors</p>
-        <p style={{ fontSize: '32px', fontWeight: '700', color: '#c94f1a' }}>5</p>
-        <p style={{ fontSize: '13px', color: '#555', marginTop: '6px' }}>Covered end to end</p>
+      <div className="stat-item" style={{
+        padding: '32px 40px',
+        borderRight: '1px solid rgba(255,255,255,0.08)',
+        textAlign: 'center',
+      }}>
+        <p className="stat-label" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: '500', letterSpacing: '1.2px', color: 'rgba(255,255,255,0.30)', textTransform: 'uppercase', marginBottom: '8px' }}>Sports-Tech Sectors</p>
+        <p className="stat-number" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '38px', fontWeight: '700', color: '#ffffff' }}>5</p>
+        <p className="stat-subtitle" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.50)', marginTop: '4px' }}>Covered end to end</p>
       </div>
 
       {/* CO-BUILT WITH */}
-      <div
-        onMouseEnter={() => setHovered('cobuilt')}
-        onMouseLeave={() => setHovered(null)}
-        style={{
-          padding: '32px 40px',
-          borderBottom: `3px solid ${hovered === 'cobuilt' ? '#e05c1a' : 'transparent'}`,
-          background: hovered === 'cobuilt' ? 'rgba(224, 92, 26, 0.06)' : 'transparent',
-          textAlign: 'center',
-          transition: 'all 0.3s ease',
-        }}>
-        <p style={{ fontSize: '11px', letterSpacing: '2px', color: '#555', textTransform: 'uppercase', marginBottom: '12px' }}>Co-built with</p>
-        <p style={{ fontSize: '24px', fontWeight: '700', color: '#fff' }}>LegaXy</p>
-        <p style={{ fontSize: '13px', color: '#555', marginTop: '6px' }}>Industry Partner</p>
+      <div className="stat-item" style={{
+        padding: '32px 40px',
+        textAlign: 'center',
+      }}>
+        <p className="stat-label" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: '500', letterSpacing: '1.2px', color: 'rgba(255,255,255,0.30)', textTransform: 'uppercase', marginBottom: '8px' }}>Co-built with</p>
+        <p className="stat-number" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '38px', fontWeight: '700', color: '#ffffff' }}>LegaXy</p>
+        <p className="stat-subtitle" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.50)', marginTop: '4px' }}>Industry Partner</p>
       </div>
 
     </section>

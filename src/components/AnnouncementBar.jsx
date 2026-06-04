@@ -10,13 +10,26 @@ function AnnouncementBar() {
   }, [])
 
   return (
-    <div style={{
-      backgroundColor: '#c94f1a',
+    <>
+    <style>{`
+@media (max-width: 767px) {
+  .ann-bar {
+    font-size: 11px !important;
+    padding: 8px 4% !important;
+    text-align: center !important;
+    letter-spacing: 0.4px !important;
+  }
+}
+`}</style>
+    <div className="ann-bar" style={{
+      backgroundColor: '#E25A1C',
       textAlign: 'center',
       padding: '10px 20px',
-      fontSize: '13px',
-      fontWeight: '500',
-      letterSpacing: '0.3px',
+      fontSize: '12.5px',
+      fontWeight: '600',
+      letterSpacing: '0.6px',
+      fontFamily: "'DM Sans', sans-serif",
+      color: '#ffffff',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -27,6 +40,7 @@ function AnnouncementBar() {
     }}>
       ⚡ Press Launch Event — June 15, 2026 · Hyderabad · India's Sports Innovation Era Begins →
     </div>
+    </>
   )
 }
 

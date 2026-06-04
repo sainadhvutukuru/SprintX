@@ -1,21 +1,58 @@
+import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import MentorFormModal from './MentorFormModal'
+import StartupFormModal from './StartupFormModal'
 // import logo from '../assets/Sprintx Official Logo.png'
 import logo from '../assets/Sprintx.png'
 
 function Navbar() {
   const location = useLocation()
+  const [isMentorModalOpen, setIsMentorModalOpen] = useState(false)
+  const [isStartupModalOpen, setIsStartupModalOpen] = useState(false)
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') {
+        setIsMentorModalOpen(false)
+        setIsStartupModalOpen(false)
+      }
+    }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [])
 
   const linkStyle = (path) => ({
-    color: location.pathname === path ? '#f15b26' : '#ccc',
-    fontSize: '14px',
-    fontWeight: location.pathname === path ? '700' : '500',
+    color: location.pathname === path ? '#ffffff' : 'rgba(255,255,255,0.70)',
+    fontSize: '13.5px',
+    fontWeight: '500',
+    fontFamily: "'DM Sans', sans-serif",
+    letterSpacing: '0.3px',
     textDecoration: 'none',
-    borderBottom: location.pathname === path ? '2px solid #f15b26' : '2px solid transparent',
+    borderBottom: location.pathname === path ? '2px solid #E25A1C' : '2px solid transparent',
     paddingBottom: '4px',
   })
 
   return (
-    <nav style={{
+    <>
+    <style>{`
+@media (max-width: 1023px) {
+  .nav-links { display: none !important; }
+  .navbar { padding: 0 4% !important; }
+}
+@media (max-width: 767px) {
+  .navbar { padding: 0 4% !important; height: 60px !important; }
+  .nav-links { display: none !important; }
+  .nav-logo { height: 28px !important; }
+  .nav-btn-mentor { display: none !important; }
+  .nav-btn-startup {
+    display: block !important;
+    font-size: 11px !important;
+    padding: 7px 12px !important;
+    border-radius: 6px !important;
+  }
+}
+`}</style>
+    <nav className="navbar" style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -33,6 +70,7 @@ function Navbar() {
         <img
           src={logo}
           alt="SprintX Logo"
+          className="nav-logo"
           style={{
             height: '40px',
             width: 'auto',
@@ -43,7 +81,7 @@ function Navbar() {
       </Link>
 
       {/* NAV LINKS */}
-      <ul style={{
+      <ul className="nav-links" style={{
         display: 'flex',
         gap: '36px',
         listStyle: 'none',
@@ -55,26 +93,28 @@ function Navbar() {
 
       {/* BUTTONS */}
       <div style={{ display: 'flex', gap: '12px' }}>
-        <button style={{
-          padding: '8px 18px',
-          border: '1.5px solid #1586c8',
-          borderRadius: '6px',
+        <button className="nav-btn-mentor" onClick={() => setIsMentorModalOpen(true)} style={{
+          padding: '9px 20px',
+          border: '1px solid rgba(255,255,255,0.18)',
+          borderRadius: '8px',
           background: 'transparent',
-          color: '#1586c8',
+          color: 'rgba(255,255,255,0.90)',
           fontSize: '13px',
-          fontWeight: '500',
+          fontWeight: '600',
+          fontFamily: "'DM Sans', sans-serif",
           cursor: 'pointer',
         }}>
           Connect as a Mentor
         </button>
-        <button style={{
-          padding: '8px 18px',
+        <button className="nav-btn-startup" onClick={() => setIsStartupModalOpen(true)} style={{
+          padding: '9px 20px',
           border: 'none',
-          borderRadius: '6px',
-          background: '#f15b26',
-          color: '#fff',
+          borderRadius: '8px',
+          background: '#E25A1C',
+          color: '#ffffff',
           fontSize: '13px',
           fontWeight: '600',
+          fontFamily: "'DM Sans', sans-serif",
           cursor: 'pointer',
         }}>
           Connect Your Startup
@@ -82,6 +122,16 @@ function Navbar() {
       </div>
 
     </nav>
+
+      <MentorFormModal
+        isOpen={isMentorModalOpen}
+        onClose={() => setIsMentorModalOpen(false)}
+      />
+      <StartupFormModal
+        isOpen={isStartupModalOpen}
+        onClose={() => setIsStartupModalOpen(false)}
+      />
+    </>
   )
 }
 

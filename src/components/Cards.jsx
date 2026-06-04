@@ -42,12 +42,21 @@ function Cards() {
 
   return (
     <>
-      <section style={{
+      <style>{`
+@media (max-width: 1023px) {
+  .cards-grid { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 767px) {
+  .cards-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .cards-section { padding: 40px 4% !important; }
+}
+`}</style>
+      <section className="cards-section" style={{
         padding: '60px 48px 80px',
         maxWidth: '1200px',
         margin: '0 auto',
       }}>
-        <div style={{
+        <div className="cards-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gap: '20px',

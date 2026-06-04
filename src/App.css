@@ -1,3 +1,18 @@
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1023px) {
+  .section-padding { padding: 80px 4% !important; }
+}
+@media (max-width: 767px) {
+  .section-padding { padding: 60px 4% !important; }
+  .section-eyebrow { font-size: 10px !important; letter-spacing: 1.6px !important; }
+  .section-heading { font-size: clamp(32px, 8vw, 52px) !important; letter-spacing: -0.5px !important; }
+  .section-subtitle { font-size: 14px !important; }
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

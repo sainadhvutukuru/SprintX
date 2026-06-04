@@ -30,7 +30,7 @@ import { useState } from 'react'
 function Edge() {
   const [hovered, setHovered] = useState(null)
   return (
-    <section style={{
+    <section className="edge-grid section-padding" style={{
       padding: '40px 80px',
       maxWidth: '1200px',
       margin: '0 auto',
@@ -38,6 +38,20 @@ function Edge() {
       gridTemplateColumns: '1fr 1fr',
       gap: '80px',
     }}>
+      <style>{`
+@media (max-width: 1023px) {
+  .edge-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+}
+@media (max-width: 767px) {
+  .edge-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .edge-item { padding: 14px 16px !important; gap: 10px !important; }
+  .edge-check { width: 28px !important; height: 28px !important; font-size: 14px !important; }
+  .edge-title { font-size: 13px !important; }
+  .edge-text { font-size: 12px !important; }
+  .edge-vs { margin-top: 0 !important; }
+  .edge-row { font-size: 12px !important; padding: 10px 16px !important; }
+}
+`}</style>
 
       {/* LEFT SIDE */}
       <div>
@@ -49,31 +63,34 @@ function Edge() {
           gap: '10px',
           marginBottom: '24px',
         }}>
-          <div style={{ width: '32px', height: '2px', background: '#c94f1a' }} />
-          <span style={{ fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', color: '#c94f1a' }}>
+          <div style={{ width: '28px', height: '2px', background: '#E25A1C' }} />
+          <span className="section-eyebrow" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: '#E25A1C' }}>
             The SprintX Edge
           </span>
         </div>
 
         {/* TITLE */}
-        <h2 style={{
+        <h2 className="section-heading" style={{
           fontFamily: "'Rajdhani', sans-serif",
-          fontSize: '72px',
+          fontSize: 'clamp(44px,6vw,72px)',
           fontWeight: '700',
           textTransform: 'uppercase',
-          lineHeight: '1.05',
-          color: '#fff',
+          letterSpacing: '-1px',
+          lineHeight: '0.92',
+          color: '#ffffff',
           marginBottom: '20px',
         }}>
           THE GAP NO ONE <br />
-          ELSE <span style={{ color: '#c94f1a' }}>FILLS</span>
+          ELSE <span style={{ color: '#E25A1C' }}>FILLS</span>
         </h2>
 
         {/* SUBTITLE */}
-        <p style={{
-          fontSize: '15px',
-          color: '#777',
-          lineHeight: '1.7',
+        <p className="section-subtitle" style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: '15.5px',
+          fontWeight: '300',
+          color: 'rgba(255,255,255,0.50)',
+          lineHeight: '1.75',
           marginBottom: '40px',
           maxWidth: '480px',
         }}>
@@ -84,6 +101,7 @@ function Edge() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {features.map((f) => (
             <div key={f.title}
+              className="edge-item"
               onMouseEnter={() => setHovered(f.title)}
               onMouseLeave={() => setHovered(null)}
               style={{
@@ -98,7 +116,7 @@ function Edge() {
                 transform: hovered === f.title ? 'translateY(-2px)' : 'translateY(0)',
                 transition: 'all 0.25s ease',
               }}>
-              <div style={{
+              <div className="edge-check" style={{
                 width: '28px',
                 height: '28px',
                 borderRadius: '6px',
@@ -115,8 +133,8 @@ function Edge() {
                 ✓
               </div>
               <div>
-                <p style={{ fontSize: '15px', fontWeight: '600', color: '#ffffff', marginBottom: '4px' }}>{f.title}</p>
-                <p style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>{f.desc}</p>
+                <p className="edge-title" style={{ fontSize: '15px', fontWeight: '600', color: '#ffffff', marginBottom: '4px' }}>{f.title}</p>
+                <p className="edge-text" style={{ fontSize: '13px', color: '#666', lineHeight: '1.6' }}>{f.desc}</p>
               </div>
             </div>
           ))}
@@ -125,7 +143,7 @@ function Edge() {
       </div>
 
       {/* RIGHT SIDE — COMPARISON TABLE */}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="edge-vs" style={{ display: 'flex', alignItems: 'center' }}>
         <div style={{
           width: '100%',
           border: '1px solid rgba(255,255,255,0.08)',
@@ -146,7 +164,7 @@ function Edge() {
 
           {/* TABLE ROWS */}
           {comparison.map((row, i) => (
-            <div key={i} style={{
+            <div key={i} className="edge-row" style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
               padding: '16px 24px',

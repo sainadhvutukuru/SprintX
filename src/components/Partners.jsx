@@ -15,11 +15,19 @@ function Partners() {
   const [hovered, setHovered] = useState(null)
 
   return (
-    <section style={{
+    <section className="section-padding" style={{
       padding: '20px 80px',
       maxWidth: '1200px',
       margin: '0 auto',
     }}>
+      <style>{`
+@media (max-width: 767px) {
+  .partner-cards { flex-direction: column !important; gap: 10px !important; }
+  .partner-card { width: 100% !important; padding: 14px 18px !important; }
+  .partner-name { font-size: 13.5px !important; }
+  .partner-span { font-size: 11px !important; }
+}
+`}</style>
       {/* LABEL */}
       <div style={{
         display: 'flex',
@@ -27,30 +35,33 @@ function Partners() {
         gap: '10px',
         marginBottom: '16px',
       }}>
-        <div style={{ width: '32px', height: '2px', background: '#f15b26' }} />
-        <span style={{ fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', color: '#f15b26' }}>
+        <div style={{ width: '28px', height: '2px', background: '#E25A1C' }} />
+        <span className="section-eyebrow" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: '#E25A1C' }}>
           Launch Partners
         </span>
       </div>
 
       {/* TITLE */}
-      <h2 style={{
+      <h2 className="section-heading" style={{
         fontFamily: "'Rajdhani', sans-serif",
-        fontSize: '72px',
+        fontSize: 'clamp(44px,6vw,72px)',
         fontWeight: '700',
         textTransform: 'uppercase',
-        lineHeight: '1.05',
-        color: '#fff',
+        letterSpacing: '-1px',
+        lineHeight: '0.92',
+        color: '#ffffff',
         marginBottom: '12px',
       }}>
         BUILT WITH THE <br /> BEST IN THE GAME
       </h2>
 
       {/* SUBTITLE */}
-      <p style={{
-        fontSize: '14px',
-        color: '#777',
-        lineHeight: '1.6',
+      <p className="section-subtitle" style={{
+        fontFamily: "'DM Sans', sans-serif",
+        fontSize: '15.5px',
+        fontWeight: '300',
+        color: 'rgba(255,255,255,0.50)',
+        lineHeight: '1.75',
         maxWidth: '500px',
         marginBottom: '24px',
       }}>
@@ -78,6 +89,11 @@ function Partners() {
       </div>
 
       <style>{`
+        @media (max-width: 767px) {
+          .ticker-card { padding: 20px 24px !important; min-height: 80px !important; }
+          .ticker-img { height: 50px !important; }
+        }
+
         .ticker-track {
           display: flex;
           gap: 0;

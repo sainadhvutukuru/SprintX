@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import logo from '../assets/Sprintx.png'
+import StartupFormModal from './StartupFormModal'
+import MentorFormModal from './MentorFormModal'
+import InvestorFormModal from './InvestorFormModal'
 
 const socialIcons = [
   {
@@ -23,15 +26,47 @@ const socialIcons = [
 function Footer() {
   const [hoveredLink, setHoveredLink] = useState(null)
   const [hoveredSocial, setHoveredSocial] = useState(null)
+  const [isStartupModalOpen, setIsStartupModalOpen] = useState(false)
+  const [isMentorModalOpen, setIsMentorModalOpen] = useState(false)
+  const [isInvestorModalOpen, setIsInvestorModalOpen] = useState(false)
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') {
+        setIsStartupModalOpen(false)
+        setIsMentorModalOpen(false)
+        setIsInvestorModalOpen(false)
+      }
+    }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [])
 
   return (
-    <footer style={{
+    <>
+
+    <footer className="footer" style={{
+      background: '#030810',
       borderTop: '1px solid rgba(255,255,255,0.08)',
-      padding: '60px 80px 32px',
+      padding: '72px 5% 36px',
     }}>
+    <style>{`
+@media (max-width: 1023px) {
+  .footer-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 32px !important; }
+}
+@media (max-width: 767px) {
+  .footer { padding: 48px 4% 24px !important; }
+  .footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .footer-desc { font-size: 13px !important; max-width: 100% !important; }
+  .footer-col-heading { font-size: 10px !important; }
+  .footer-link { font-size: 13px !important; margin-bottom: 9px !important; }
+  .footer-bottom { flex-direction: column !important; align-items: center !important; gap: 8px !important; text-align: center !important; }
+  .footer-copyright { font-size: 11px !important; }
+}
+`}</style>
 
       {/* TOP SECTION */}
-      <div style={{
+      <div className="footer-grid" style={{
         display: 'grid',
         gridTemplateColumns: '1.5fr 1fr 1fr 1fr',
         gap: '60px',
@@ -50,28 +85,31 @@ function Footer() {
               marginBottom: '20px',
             }}
           />
-          <p style={{
+          <p className="footer-desc" style={{
+            fontFamily: "'DM Sans', sans-serif",
             fontSize: '14px',
-            color: '#666',
+            fontWeight: '300',
+            color: 'rgba(255,255,255,0.50)',
             lineHeight: '1.8',
             marginBottom: '16px',
           }}>
             India's first full-stack Sports Innovation Accelerator. Building the sports innovation backbone of India — from grassroots to global.
           </p>
-          <p style={{ fontSize: '12px', color: '#444' }}>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>
             An Inve Sports Venture initiative · sprintxcel.com
           </p>
         </div>
 
         {/* PROGRAMS */}
         <div>
-          <p style={{
-            fontSize: '11px',
-            letterSpacing: '2px',
+          <p className="footer-col-heading" style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: '10.5px',
+            fontWeight: '700',
+            letterSpacing: '1.4px',
             textTransform: 'uppercase',
-            color: '#555',
-            marginBottom: '20px',
-            fontWeight: '600',
+            color: 'rgba(255,255,255,0.30)',
+            marginBottom: '18px',
           }}>
             Programs
           </p>
@@ -79,13 +117,16 @@ function Footer() {
             <a
               key={item}
               href="#"
+              className="footer-link"
               onMouseEnter={() => setHoveredLink(item)}
               onMouseLeave={() => setHoveredLink(null)}
               style={{
                 display: 'block',
-                fontSize: '14px',
-                color: hoveredLink === item ? '#e05c1a' : '#777',
-                marginBottom: '12px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '13.5px',
+                fontWeight: '300',
+                color: hoveredLink === item ? '#E25A1C' : 'rgba(255,255,255,0.70)',
+                marginBottom: '11px',
                 textDecoration: 'none',
                 transition: 'color 0.2s ease',
               }}
@@ -97,27 +138,31 @@ function Footer() {
 
         {/* ECOSYSTEM */}
         <div>
-          <p style={{
-            fontSize: '11px',
-            letterSpacing: '2px',
+          <p className="footer-col-heading" style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: '10.5px',
+            fontWeight: '700',
+            letterSpacing: '1.4px',
             textTransform: 'uppercase',
-            color: '#555',
-            marginBottom: '20px',
-            fontWeight: '600',
+            color: 'rgba(255,255,255,0.30)',
+            marginBottom: '18px',
           }}>
             Ecosystem
           </p>
-          {['Inve Sports Venture', '360DSports', 'Network+', 'Sports Tech Podium'].map((item) => (
+          {['Inve Sports Venture', '360DSports', 'Sports Tech Podium', 'Network+'].map((item) => (
             <a
               key={item}
               href="#"
+              className="footer-link"
               onMouseEnter={() => setHoveredLink(item)}
               onMouseLeave={() => setHoveredLink(null)}
               style={{
                 display: 'block',
-                fontSize: '14px',
-                color: hoveredLink === item ? '#e05c1a' : '#777',
-                marginBottom: '12px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '13.5px',
+                fontWeight: '300',
+                color: hoveredLink === item ? '#E25A1C' : 'rgba(255,255,255,0.70)',
+                marginBottom: '11px',
                 textDecoration: 'none',
                 transition: 'color 0.2s ease',
               }}
@@ -129,34 +174,62 @@ function Footer() {
 
         {/* CONNECT */}
         <div>
-          <p style={{
-            fontSize: '11px',
-            letterSpacing: '2px',
+          <p className="footer-col-heading" style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: '10.5px',
+            fontWeight: '700',
+            letterSpacing: '1.4px',
             textTransform: 'uppercase',
-            color: '#555',
-            marginBottom: '20px',
-            fontWeight: '600',
+            color: 'rgba(255,255,255,0.30)',
+            marginBottom: '18px',
           }}>
             Connect
           </p>
-          {['Connect Your Startup', 'Connect as a Mentor', 'Connect as an Investor', 'hello@sprintxcel.com'].map((item) => (
+          {[
+            { label: 'Connect Your Startup', onClick: () => setIsStartupModalOpen(true) },
+            { label: 'Connect as a Mentor', onClick: () => setIsMentorModalOpen(true) },
+            { label: 'Connect as an Investor', onClick: () => setIsInvestorModalOpen(true) },
+          ].map((item) => (
             <a
-              key={item}
+              key={item.label}
               href="#"
-              onMouseEnter={() => setHoveredLink(item)}
+              className="footer-link"
+              onClick={(e) => { e.preventDefault(); item.onClick() }}
+              onMouseEnter={() => setHoveredLink(item.label)}
               onMouseLeave={() => setHoveredLink(null)}
               style={{
                 display: 'block',
-                fontSize: '14px',
-                color: hoveredLink === item ? '#e05c1a' : '#777',
-                marginBottom: '12px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '13.5px',
+                fontWeight: '300',
+                color: hoveredLink === item.label ? '#E25A1C' : 'rgba(255,255,255,0.70)',
+                marginBottom: '11px',
                 textDecoration: 'none',
                 transition: 'color 0.2s ease',
+                cursor: 'pointer',
               }}
             >
-              {item}
+              {item.label}
             </a>
           ))}
+          <a
+            className="footer-link"
+            href="mailto:hello@sprintxcel.com"
+            onMouseEnter={() => setHoveredLink('hello@sprintxcel.com')}
+            onMouseLeave={() => setHoveredLink(null)}
+            style={{
+              display: 'block',
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: '13.5px',
+              fontWeight: '300',
+              color: hoveredLink === 'hello@sprintxcel.com' ? '#E25A1C' : 'rgba(255,255,255,0.70)',
+              marginBottom: '11px',
+              textDecoration: 'none',
+              transition: 'color 0.2s ease',
+            }}
+          >
+            hello@sprintxcel.com
+          </a>
         </div>
 
         {/* SOCIAL ICONS — centered below Programs, Ecosystem, Connect */}
@@ -179,7 +252,7 @@ function Footer() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: hoveredSocial === icon.name ? '#e05c1a' : 'rgba(255,255,255,0.5)',
+                color: hoveredSocial === icon.name ? '#E25A1C' : 'rgba(255,255,255,0.5)',
                 transition: 'color 0.2s ease',
               }}
             >
@@ -192,22 +265,36 @@ function Footer() {
       </div>
 
       {/* BOTTOM BAR */}
-      <div style={{
+      <div className="footer-bottom" style={{
         borderTop: '1px solid rgba(255,255,255,0.06)',
         paddingTop: '24px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-        <p style={{ fontSize: '12px', color: '#444' }}>
+        <p className="footer-copyright" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>
           © 2026 SprintX · Inve Sports Venture · Hyderabad, India
         </p>
-        <p style={{ fontSize: '12px', color: '#444' }}>
+        <p className="footer-copyright" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>
           sprintxcel.com
         </p>
       </div>
 
     </footer>
+
+      <StartupFormModal
+        isOpen={isStartupModalOpen}
+        onClose={() => setIsStartupModalOpen(false)}
+      />
+      <MentorFormModal
+        isOpen={isMentorModalOpen}
+        onClose={() => setIsMentorModalOpen(false)}
+      />
+      <InvestorFormModal
+        isOpen={isInvestorModalOpen}
+        onClose={() => setIsInvestorModalOpen(false)}
+      />
+    </>
   )
 }
 

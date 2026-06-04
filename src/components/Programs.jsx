@@ -6,8 +6,9 @@ const programs = [
     desc: 'From idea to validated MVP',
     body: 'Built for the sports-tech idea that deserves more than just feedback. Through structured mentorship and hands-on sessions, on campus or online, you leave with a validated MVP, a business model that holds up, and a clear path to what comes next.',
     btnText: 'Check Spark Programs →',
-    btnColor: '#c94f1a',
+    btnColor: '#E25A1C',
     headerBg: 'linear-gradient(135deg, rgba(226,90,28,0.15), rgba(226,90,28,0.04))',
+    cls: 'card-spark',
   },
   {
     number: '02',
@@ -16,8 +17,9 @@ const programs = [
     desc: 'From first product to first revenue',
     body: 'The gap between a working product and real revenue is where most sports-tech startups stall. Stride closes it, with structured support on market fit, sales strategy, and the pilot deployments that make the business real.',
     btnText: 'Check Stride Programs →',
-    btnColor: '#1aa88a',
+    btnColor: '#19A574',
     headerBg: 'linear-gradient(135deg, rgba(25,165,116,0.15), rgba(25,165,116,0.04))',
+    cls: 'card-stride',
   },
   {
     number: '03',
@@ -26,21 +28,60 @@ const programs = [
     desc: 'From revenue to scale',
     body: 'The flagship program for founders who are done testing and ready to scale. A structured 24-week journey of deep mentorship, curated investor access, and strategic accountability that turns a promising sports-tech startup into a company worth funding.',
     btnText: 'Check Sprintx Programs →',
-    btnColor: '#4aacef',
+    btnColor: '#1B7EC8',
     headerBg: 'linear-gradient(135deg, rgba(27,126,200,0.15), rgba(27,126,200,0.04))',
+    cls: 'card-sprintx',
   },
 ]
 
-import { useState } from 'react'
-
 function Programs() {
-  const [hoveredCard, setHoveredCard] = useState(null)
   return (
-    <section style={{
+    <section className="section-padding" style={{
       padding: '40px 80px',
       maxWidth: '1200px',
       margin: '0 auto',
     }}>
+      <style>{`
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+@media (max-width: 1023px) {
+  .prog-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+}
+@media (max-width: 767px) {
+  .prog-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .prog-header { padding: 24px 20px 18px !important; }
+  .prog-name { font-size: 32px !important; }
+  .prog-number { font-size: 52px !important; }
+  .prog-body { padding: 16px 20px !important; }
+  .prog-btn { width: calc(100% - 40px) !important; margin: 0 20px 20px !important; padding: 10px !important; }
+}
+
+.prog-card {
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.prog-card:hover {
+  transform: translateY(-8px);
+}
+.card-spark:hover {
+  border-color: rgba(226, 90, 28, 0.4);
+  box-shadow: 0 30px 60px rgba(226, 90, 28, 0.12);
+}
+.card-stride:hover {
+  border-color: rgba(25, 165, 116, 0.4);
+  box-shadow: 0 30px 60px rgba(25, 165, 116, 0.12);
+}
+.card-sprintx:hover {
+  border-color: rgba(27, 126, 200, 0.4);
+  box-shadow: 0 30px 60px rgba(27, 126, 200, 0.12);
+}
+`}</style>
 
       {/* LABEL */}
       <div style={{
@@ -49,28 +90,33 @@ function Programs() {
         gap: '10px',
         marginBottom: '24px',
       }}>
-        <div style={{ width: '32px', height: '2px', background: '#c94f1a' }} />
-        <span style={{ fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', color: '#777' }}>
+        <div style={{ width: '28px', height: '2px', background: '#E25A1C' }} />
+        <span className="section-eyebrow" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: '#E25A1C' }}>
           Three Programs
         </span>
       </div>
 
       {/* TITLE */}
-      <h2 style={{
-        fontFamily: "'Bebas Neue', sans-serif",
-        fontSize: 'clamp(48px, 6vw, 80px)',
-        lineHeight: '1',
-        color: '#fff',
+      <h2 className="section-heading" style={{
+        fontFamily: "'Rajdhani', sans-serif",
+        fontSize: 'clamp(44px,6vw,72px)',
+        fontWeight: '700',
+        textTransform: 'uppercase',
+        letterSpacing: '-1px',
+        lineHeight: '0.92',
+        color: '#ffffff',
         marginBottom: '16px',
       }}>
         ONE JOURNEY. <br />
-        <span style={{ color: '#4aacef' }}>EVERY STAGE.</span>
+        <span style={{ color: '#1B7EC8' }}>EVERY STAGE.</span>
       </h2>
 
-      <p style={{
-        fontSize: '15px',
-        color: '#777',
-        lineHeight: '1.7',
+      <p className="section-subtitle" style={{
+        fontFamily: "'DM Sans', sans-serif",
+        fontSize: '15.5px',
+        fontWeight: '300',
+        color: 'rgba(255,255,255,0.50)',
+        lineHeight: '1.75',
         maxWidth: '500px',
         marginBottom: '60px',
       }}>
@@ -78,61 +124,62 @@ function Programs() {
       </p>
 
       {/* CARDS */}
-      <div style={{
+      <div className="prog-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
         gap: '20px',
       }}>
         {programs.map((p) => (
-          <div key={p.name}
-            onMouseEnter={() => setHoveredCard(p.name)}
-            onMouseLeave={() => setHoveredCard(null)}
-            style={{
-              border: `1px solid ${hoveredCard === p.name ? p.btnColor : 'rgba(255,255,255,0.08)'}`,
-              borderRadius: '12px',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-              minWidth: '360px',
-              transform: hoveredCard === p.name ? 'translateY(-6px)' : 'translateY(0)',
-              boxShadow: hoveredCard === p.name ? `0 12px 40px ${p.btnColor}30` : 'none',
-              transition: 'all 0.3s ease',
-              cursor: 'pointer',
-            }}>
+          <div key={p.name} className={'prog-card ' + p.cls}>
 
             {/* HEADER with tint */}
-            <div style={{
-              padding: '32px 28px 0',
+            <div className="prog-header" style={{
+              padding: '30px 26px 24px',
               background: p.headerBg,
               position: 'relative',
             }}>
 
               <div>
                 <div>
-                  <p style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#555', marginBottom: '8px' }}>
+                  <p style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: '10.5px',
+                    fontWeight: '700',
+                    letterSpacing: '1.6px',
+                    textTransform: 'uppercase',
+                    color: p.btnColor,
+                    marginBottom: '8px',
+                  }}>
                     {p.stage}
                   </p>
-                  <h3 style={{
-                    fontFamily: "'Barlow Condensed', sans-serif",
-                    fontSize: '48px',
-                    fontWeight: '800',
+                  <h3 className="prog-name" style={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: '42px',
+                    fontWeight: '700',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
                     color: '#ffffff',
                     lineHeight: '1',
-                    textTransform: 'uppercase',
                   }}>
                     {p.name}
                   </h3>
-                  <p style={{ fontSize: '13px', color: '#555', marginTop: '6px' }}>{p.desc}</p>
+                  <p style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: '13px',
+                    fontWeight: '300',
+                    color: 'rgba(255,255,255,0.50)',
+                    marginTop: '6px',
+                  }}>{p.desc}</p>
                 </div>
-                <span style={{
+                <span className="prog-number" style={{
                   fontFamily: "'Rajdhani', sans-serif",
-                  fontSize: '72px',
+                  fontSize: '68px',
                   fontWeight: '700',
                   lineHeight: '1',
-                  opacity: '0.08',
+                  opacity: '0.07',
                   position: 'absolute',
-                  top: '16px',
-                  right: '24px',
+                  top: '12px',
+                  right: '20px',
                 }}>
                   {p.number}
                 </span>
@@ -143,9 +190,9 @@ function Programs() {
             </div>
 
             {/* BODY — neutral */}
-            <div style={{
-              padding: '20px 28px 32px',
-              background: hoveredCard === p.name ? `${p.btnColor}08` : 'rgba(255,255,255,0.02)',
+            <div className="prog-body" style={{
+              padding: '22px 26px',
+              background: 'rgba(255,255,255,0.02)',
               display: 'flex',
               flexDirection: 'column',
               gap: '20px',
@@ -153,25 +200,28 @@ function Programs() {
             }}>
 
               <p style={{
-                fontSize: '15px',
-                color: 'rgba(255,255,255,0.6)',
-                lineHeight: '1.7',
-                fontWeight: '400',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '13px',
+                fontWeight: '300',
+                color: 'rgba(255,255,255,0.50)',
+                lineHeight: '1.6',
               }}>
                 {p.body}
               </p>
 
-              <button style={{
-                marginTop: 'auto',
-                padding: '12px',
-                borderRadius: '7px',
-                fontSize: '14px',
+              <button className="prog-btn" style={{
+                width: 'calc(100% - 52px)',
+                margin: '0 26px 26px',
+                padding: '11px',
+                borderRadius: '8px',
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: '13px',
                 fontWeight: '600',
                 border: 'none',
                 background: p.btnColor,
                 color: '#fff',
-                width: '100%',
                 cursor: 'pointer',
+                transition: 'opacity 0.2s',
               }}>
                 {p.btnText}
               </button>
